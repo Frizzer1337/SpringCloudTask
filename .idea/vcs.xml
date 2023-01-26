@@ -2,9 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ApproveMicroservice" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/BorrowerMicroservice" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/KafkaApi" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/NotificationMicroservice" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ApproveMicroservice" vcs="" />
+    <mapping directory="$PROJECT_DIR$/BorrowerMicroservice" vcs="" />
+    <mapping directory="$PROJECT_DIR$/KafkaApi" vcs="" />
+    <mapping directory="$PROJECT_DIR$/NotificationMicroservice" vcs="" />
   </component>
 </project>

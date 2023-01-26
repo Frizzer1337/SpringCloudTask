@@ -23,7 +23,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/KafkaApi" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -59,6 +59,7 @@
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
     "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "spring.configuration.checksum": "2b80ef00a9285521058982b34cd862eb"
   }
 }]]></component>
@@ -129,7 +130,8 @@
       <workItem from="1673706461428" duration="130000" />
       <workItem from="1673742499466" duration="3319000" />
       <workItem from="1674141703125" duration="3378000" />
-      <workItem from="1674661648273" duration="1667000" />
+      <workItem from="1674661648273" duration="5683000" />
+      <workItem from="1674692744165" duration="593000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1674661915039</created>
