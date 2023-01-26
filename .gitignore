@@ -1,5 +1,5 @@
 target/
-mvn/wrapper
+.mvn/wrapper
 mvnw
 mvnw.cmd
 !**/src/main/**/target/
