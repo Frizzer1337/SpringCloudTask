@@ -5,7 +5,6 @@ import com.frizzer.borrowermicroservice.service.impl.BorrowerServiceImpl
 import com.frizzer.borrowermicroservice.service.impl.CreditServiceImpl
 import com.frizzer.kafkaapi.entity.Borrower
 import com.frizzer.kafkaapi.entity.Credit
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,7 +14,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/borrower")
-class BorrowerController @Autowired constructor(
+class BorrowerController(
     val borrowerService: BorrowerServiceImpl,
     val creditService: CreditServiceImpl
 ) {

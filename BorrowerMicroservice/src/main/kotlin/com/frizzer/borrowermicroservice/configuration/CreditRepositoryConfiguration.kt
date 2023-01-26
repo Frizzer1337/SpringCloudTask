@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class CreditRepositoryConfiguration @Autowired constructor(private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
+class CreditRepositoryConfiguration(private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
     @Bean
     fun creditRepository(): CreditRepository {
         return MongoCreditRepository(
