@@ -1,8 +1,8 @@
 package com.frizzer.borrowermicroservice.controller
 
 
-import com.frizzer.borrowermicroservice.service.impl.BorrowerServiceImpl
-import com.frizzer.borrowermicroservice.service.impl.CreditServiceImpl
+import com.frizzer.borrowermicroservice.service.BorrowerService
+import com.frizzer.borrowermicroservice.service.CreditService
 import com.frizzer.kafkaapi.entity.Borrower
 import com.frizzer.kafkaapi.entity.Credit
 import org.springframework.http.ResponseEntity
@@ -15,8 +15,8 @@ import reactor.core.publisher.Mono
 @RestController
 @RequestMapping("/borrower")
 class BorrowerController(
-    private val borrowerService: BorrowerServiceImpl,
-    private val creditService: CreditServiceImpl
+    private val borrowerService: BorrowerService,
+    private val creditService: CreditService
 ) {
 
     @PostMapping("/register")
