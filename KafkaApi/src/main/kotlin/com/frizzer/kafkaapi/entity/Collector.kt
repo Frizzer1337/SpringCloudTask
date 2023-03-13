@@ -1,6 +1,4 @@
-package kafka.practice.api.entity
-
-import com.frizzer.kafkaapi.entity.CollectorActivityStatus
+package com.frizzer.kafkaapi.entity
 
 class Collector(
     var id: String,

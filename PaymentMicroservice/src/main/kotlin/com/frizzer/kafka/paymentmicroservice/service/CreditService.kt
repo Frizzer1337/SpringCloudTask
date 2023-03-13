@@ -1,14 +1,15 @@
 package com.frizzer.kafka.paymentmicroservice.service
 
+import com.frizzer.kafkaapi.entity.Credit
 import com.frizzer.kafkaapi.entity.Payment
 import reactor.core.Disposable
 import reactor.core.publisher.Mono
 
 interface CreditService {
 
-    fun pay(payment: Payment): Mono<Boolean>
+    fun pay(payment: Payment): Mono<Credit>
 
-    fun payAndSavePayment(payment: Payment): Mono<Boolean>
+    fun payAndSavePayment(payment: Payment): Mono<Credit>
 
     fun sendPenalty(): Disposable
 

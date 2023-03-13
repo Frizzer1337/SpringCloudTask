@@ -1,6 +1,5 @@
-package kafka.practice.api.entity
+package com.frizzer.kafkaapi.entity
 
-import com.frizzer.kafkaapi.entity.Credit
 import org.bson.types.ObjectId
 import java.time.LocalDateTime
 

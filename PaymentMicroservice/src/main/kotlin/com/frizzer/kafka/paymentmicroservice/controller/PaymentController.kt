@@ -1,6 +1,7 @@
 package com.frizzer.kafka.paymentmicroservice.controller
 
 import com.frizzer.kafka.paymentmicroservice.service.impl.CreditServiceImpl
+import com.frizzer.kafkaapi.entity.Credit
 import com.frizzer.kafkaapi.entity.Payment
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -11,10 +12,10 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/payment")
-class PaymentController(val creditService: CreditServiceImpl) {
+class PaymentController(private val creditService: CreditServiceImpl) {
 
     @PostMapping("/pay")
-    fun register(@RequestBody payment: Payment): ResponseEntity<Mono<Boolean>> {
+    fun register(@RequestBody payment: Payment): ResponseEntity<Mono<Credit>> {
         return ResponseEntity.ok(creditService.payAndSavePayment(payment))
     }
 }

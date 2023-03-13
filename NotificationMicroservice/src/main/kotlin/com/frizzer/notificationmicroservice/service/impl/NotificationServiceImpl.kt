@@ -23,7 +23,7 @@ class NotificationServiceImpl(
     var log: Logger = LoggerFactory.getLogger(NotificationServiceImpl::class.java)
 
     @EventListener(ApplicationStartedEvent::class)
-    fun kafkaReceivingCredit(): Mono<Void> {
+    override fun kafkaReceivingCredit(): Mono<Void> {
         return kafkaReceiver
             .receive()
             .doOnNext { x ->
@@ -34,7 +34,7 @@ class NotificationServiceImpl(
     }
 
     @EventListener(ApplicationStartedEvent::class)
-    fun kafkaReceivingCreditCheck(): Mono<Void> {
+    override fun kafkaReceivingCreditCheck(): Mono<Void> {
         return kafkaCreditCheckReceiver
             .receive()
             .doOnNext { x ->
@@ -45,7 +45,7 @@ class NotificationServiceImpl(
     }
 
     @EventListener(ApplicationStartedEvent::class)
-    fun kafkaReceivingCreditPayed(): Mono<Void> {
+    override fun kafkaReceivingCreditPayed(): Mono<Void> {
         return kafkaCreditPayedReceiver
             .receive()
             .doOnNext { x ->
@@ -56,7 +56,7 @@ class NotificationServiceImpl(
     }
 
     @EventListener(ApplicationStartedEvent::class)
-    fun kafkaReceivingCreditPayment(): Mono<Void> {
+    override fun kafkaReceivingCreditPayment(): Mono<Void> {
         return kafkaCreditPaymentReceiver
             .receive()
             .doOnNext { x ->
@@ -67,7 +67,7 @@ class NotificationServiceImpl(
     }
 
     @EventListener(ApplicationStartedEvent::class)
-    fun kafkaReceivingCreditCollector(): Mono<Void> {
+    override fun kafkaReceivingCreditCollector(): Mono<Void> {
         return kafkaCreditCollectorReceiver
             .receive()
             .doOnNext { x ->

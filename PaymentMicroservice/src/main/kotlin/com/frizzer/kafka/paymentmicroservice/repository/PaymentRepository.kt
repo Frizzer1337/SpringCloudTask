@@ -1,9 +1,6 @@
 package com.frizzer.kafka.paymentmicroservice.repository
 
 import com.frizzer.kafkaapi.entity.Payment
-import reactor.core.publisher.Mono
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 
-interface PaymentRepository {
-
-    fun save(payment: Payment): Mono<Boolean>
-}
+interface PaymentRepository : ReactiveMongoRepository<Payment, String>

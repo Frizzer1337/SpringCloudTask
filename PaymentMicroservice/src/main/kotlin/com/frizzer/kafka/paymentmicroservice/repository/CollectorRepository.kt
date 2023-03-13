@@ -1,8 +1,6 @@
 package com.frizzer.kafka.paymentmicroservice.repository
 
-import kafka.practice.api.entity.CollectorCredit
-import reactor.core.publisher.Mono
+import com.frizzer.kafkaapi.entity.CollectorCredit
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 
-interface CollectorRepository {
-    fun save(collectorCredit: CollectorCredit): Mono<Boolean>
-}
+interface CollectorRepository : ReactiveMongoRepository<CollectorCredit, String>

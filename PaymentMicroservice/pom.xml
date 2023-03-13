@@ -39,18 +39,16 @@
       <groupId>org.springframework.boot</groupId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <artifactId>spring-kafka-test</artifactId>
       <groupId>org.springframework.kafka</groupId>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
-
     <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-reactivestreams -->
     <dependency>
-      <artifactId>mongodb-driver-reactivestreams</artifactId>
-      <groupId>org.mongodb</groupId>
-      <version>4.7.0</version>
+      <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+      <groupId>org.springframework.boot</groupId>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-core -->
@@ -65,6 +63,7 @@
       <scope>compile</scope>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
+
   </dependencies>
   <description>kafkaPractice</description>
   <groupId>com.frizzer.kafka</groupId>
