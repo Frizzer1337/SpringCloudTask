@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class BorrowerMongoConfiguration {
+open class BorrowerMongoConfiguration {
     @Bean
-    fun database(): MongoDatabase {
+    open fun database(): MongoDatabase {
         val mongo = MongoClients.create()
         val pojoCodecRegistry = CodecRegistries.fromRegistries(
             MongoClientSettings.getDefaultCodecRegistry(),

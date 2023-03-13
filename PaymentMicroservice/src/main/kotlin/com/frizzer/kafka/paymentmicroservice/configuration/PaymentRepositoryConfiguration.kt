@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class PaymentRepositoryConfiguration (private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
+open class PaymentRepositoryConfiguration(private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
     @Bean
-    fun paymentRepository(): PaymentRepository {
+    open fun paymentRepository(): PaymentRepository {
         return MongoPaymentRepository(
             borrowerMongoConfiguration.database().getCollection("payment", Payment::class.java)
         )

@@ -1,11 +1,8 @@
 package com.frizzer.approvemicroservice.repository
 
 import com.frizzer.kafkaapi.entity.Credit
-import com.frizzer.kafkaapi.entity.CreditStatus
-import reactor.core.publisher.Mono
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.stereotype.Repository
 
-interface CreditRepository{
-
-    fun changeStatus(credit: Credit, creditStatus: CreditStatus): Mono<Credit>
-
-}
+@Repository
+interface CreditRepository : ReactiveMongoRepository<Credit, String>

@@ -1,9 +1,12 @@
 package com.frizzer.borrowermicroservice.repository
 
 import com.frizzer.kafkaapi.entity.Credit
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 
-interface CreditRepository {
+@Repository
+interface CreditRepository : ReactiveMongoRepository<Credit, String> {
+    fun save(credit: Credit): Mono<Credit>
 
-    fun save(credit: Credit?): Mono<Boolean>
 }

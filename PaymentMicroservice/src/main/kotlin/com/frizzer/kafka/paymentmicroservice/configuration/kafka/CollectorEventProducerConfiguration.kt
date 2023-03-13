@@ -11,12 +11,12 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 import reactor.kafka.sender.SenderOptions
 
 @Configuration
-class CollectorEventProducerConfiguration{
+open class CollectorEventProducerConfiguration {
     @Value(value = "\${kafka.bootstrapAddress}")
     private val bootstrapAddress: String? = null
 
     @Bean
-    fun reactiveKafkaTemplate(): ReactiveKafkaProducerTemplate<String, CollectorEvent> {
+    open fun reactiveKafkaTemplate(): ReactiveKafkaProducerTemplate<String, CollectorEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java

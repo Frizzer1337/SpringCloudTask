@@ -9,15 +9,14 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import reactor.kafka.receiver.KafkaReceiver
-import reactor.kafka.receiver.ReceiverRecord
 
 @Service
 class NotificationServiceImpl(
     private val kafkaReceiver: KafkaReceiver<String, Credit>,
-    private val kafkaCreditCheckReceiver : KafkaReceiver<String,CreditCheckEvent>,
-    private val kafkaCreditPayedReceiver : KafkaReceiver<String,CreditPayedEvent>,
-    private val kafkaCreditCollectorReceiver : KafkaReceiver<String,CollectorEvent>,
-    private val kafkaCreditPaymentReceiver : KafkaReceiver<String, PaymentEvent>
+    private val kafkaCreditCheckReceiver: KafkaReceiver<String, CreditCheckEvent>,
+    private val kafkaCreditPayedReceiver: KafkaReceiver<String, CreditPayedEvent>,
+    private val kafkaCreditCollectorReceiver: KafkaReceiver<String, CollectorEvent>,
+    private val kafkaCreditPaymentReceiver: KafkaReceiver<String, PaymentEvent>
 
 ) : NotificationService {
 
@@ -73,7 +72,9 @@ class NotificationServiceImpl(
             .receive()
             .doOnNext { x ->
                 log.info(
-                    "Credit {} was sent to collectors at offset: {}", x.value().javaClass, x.offset()
+                    "Credit {} was sent to collectors at offset: {}",
+                    x.value().javaClass,
+                    x.offset()
                 )
             }.then()
     }

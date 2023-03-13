@@ -13,7 +13,7 @@ import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
 @EnableKafka
-class KafkaCreditReceiverConfig {
+open class KafkaCreditReceiverConfig {
 
     private lateinit var receiverOptions: ReceiverOptions<String, Credit>
 
@@ -27,14 +27,15 @@ class KafkaCreditReceiverConfig {
     private val topic: String? = null
 
     @Bean
-    fun kafkaCreditConsumerFactoryTemplate(): KafkaReceiver<String, Credit> {
+    open fun kafkaCreditConsumerFactoryTemplate(): KafkaReceiver<String, Credit> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
         receiverOptions = ReceiverOptions.create(props)
-        receiverOptions = receiverOptions.withValueDeserializer(JsonDeserializer(Credit::class.java))
+        receiverOptions =
+            receiverOptions.withValueDeserializer(JsonDeserializer(Credit::class.java))
         receiverOptions = receiverOptions.subscription(setOf(topic))
         return KafkaReceiver.create(receiverOptions)
     }

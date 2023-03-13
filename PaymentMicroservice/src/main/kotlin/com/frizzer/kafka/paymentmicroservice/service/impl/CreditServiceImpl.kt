@@ -27,36 +27,32 @@ class CreditServiceImpl(
     override fun pay(payment: Payment): Mono<Boolean> {
         return creditRepository
             .pay(payment)
-            .map{ x ->
-                creditRepository
-                    .checkIfCreditPayed(x)
-                    .map{ creditPayed ->
-                        if (java.lang.Boolean.TRUE == creditPayed) {
-                            kafkaCreditPayedTemplate
-                                .send("CREDIT_PAYED", CreditPayedEvent(x))
-                                .doOnSuccess {result ->
-                                    log.info(
-                                        "Credit payed event sent {} offset: {}",
-                                        CreditPayedEvent(x),
-                                        result.recordMetadata().offset()
-                                    )
-                                }.map{true}
-                        } else {
-                            kafkaTemplate
-                                .send("CREDIT_PAYMENT", PaymentEvent(x))
-                                .doOnSuccess { result ->
-                                    log.info(
-                                        "Credit payment event sent {} offset: {}",
-                                        PaymentEvent(x),
-                                        result.recordMetadata().offset()
-                                    )
-                                }.map{true}
-                        }
-                    }
-            }
+            .map { x -> getSomething(x) }
             .map { true }
             .defaultIfEmpty(false)
     }
+
+    private fun getSomething(x: Credit) =
+        creditRepository.checkIfCreditPayed(x).map { creditPayed ->
+            if (java.lang.Boolean.TRUE == creditPayed) {
+                kafkaCreditPayedTemplate.send("CREDIT_PAYED", CreditPayedEvent(x))
+                    .doOnSuccess { result ->
+                        log.info(
+                            "Credit payed event sent {} offset: {}",
+                            CreditPayedEvent(x),
+                            result.recordMetadata().offset()
+                        )
+                    }.map { true }
+            } else {
+                kafkaTemplate.send("CREDIT_PAYMENT", PaymentEvent(x)).doOnSuccess { result ->
+                    log.info(
+                        "Credit payment event sent {} offset: {}",
+                        PaymentEvent(x),
+                        result.recordMetadata().offset()
+                    )
+                }.map { true }
+            }
+        }
 
     @Transactional
     override fun payAndSavePayment(payment: Payment): Mono<Boolean> {
@@ -76,32 +72,21 @@ class CreditServiceImpl(
 
     @Scheduled(fixedDelay = 10000)
     override fun sendToCollectorsForBigPenalty(): Disposable {
-        return creditRepository
-            .findCreditToSendCollector()
-            .flatMap { x ->
-                collectorService
-                    .save(CollectorCredit(x))
-                    .then(
-                        kafkaCollectorTemplate
-                            .send("CREDIT_TO_COLLECTOR", CollectorEvent(x.id,x.creditStatus))
-                            .doOnNext { result ->
-                                log.info(
-                                    "sent {} offset: {}",
-                                    x,
-                                    result.recordMetadata().offset()
-                                )
-                            }
-                    )
-            }
-            .then(creditRepository.markCreditSendToCollector())
-            .subscribe()
+        return creditRepository.findCreditToSendCollector().flatMap { x ->
+            collectorService.save(CollectorCredit(x)).then(kafkaCollectorTemplate.send(
+                "CREDIT_TO_COLLECTOR",
+                CollectorEvent(x.id, x.creditStatus)
+            ).doOnNext { result ->
+                log.info(
+                    "sent {} offset: {}", x, result.recordMetadata().offset()
+                )
+            })
+        }.then(creditRepository.markCreditSendToCollector()).subscribe()
     }
 
     @Scheduled(fixedDelay = 10000)
     override fun sendWarnForBigPenalty(): Disposable {
-        return creditRepository
-            .checkCreditToWarn()
-            .doOnNext { x -> log.warn("Credit have big penalty {}", x) }
-            .subscribe()
+        return creditRepository.checkCreditToWarn()
+            .doOnNext { x -> log.warn("Credit have big penalty {}", x) }.subscribe()
     }
 }

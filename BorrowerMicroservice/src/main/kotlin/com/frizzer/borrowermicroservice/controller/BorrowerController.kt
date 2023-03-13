@@ -15,17 +15,17 @@ import reactor.core.publisher.Mono
 @RestController
 @RequestMapping("/borrower")
 class BorrowerController(
-    val borrowerService: BorrowerServiceImpl,
-    val creditService: CreditServiceImpl
+    private val borrowerService: BorrowerServiceImpl,
+    private val creditService: CreditServiceImpl
 ) {
 
     @PostMapping("/register")
-    fun register(@RequestBody borrower: Borrower): ResponseEntity<Mono<Boolean>> {
+    fun register(@RequestBody borrower: Borrower): ResponseEntity<Mono<Borrower>> {
         return ResponseEntity.ok(borrowerService.register(borrower))
     }
 
     @PostMapping("/takeCredit")
-    fun takeCredit(@RequestBody credit: Credit): ResponseEntity<Mono<Boolean>> {
+    fun takeCredit(@RequestBody credit: Credit): ResponseEntity<Mono<Credit>> {
         return ResponseEntity.ok(creditService.takeCredit(credit))
     }
 }

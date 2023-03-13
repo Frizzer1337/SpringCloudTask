@@ -1,6 +1,5 @@
 package com.frizzer.notificationmicroservice.configuration
 
-import com.frizzer.kafkaapi.entity.Credit
 import com.frizzer.kafkaapi.entity.CreditPayedEvent
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -12,7 +11,7 @@ import reactor.kafka.receiver.KafkaReceiver
 import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
-class KafkaCreditPayedConfig {
+open class KafkaCreditPayedConfig {
 
     private lateinit var receiverOptions: ReceiverOptions<String, CreditPayedEvent>
 
@@ -26,14 +25,15 @@ class KafkaCreditPayedConfig {
     private val topic: String? = null
 
     @Bean
-    fun kafkaCreditPayedConsumerFactoryTemplate(): KafkaReceiver<String, CreditPayedEvent> {
+    open fun kafkaCreditPayedConsumerFactoryTemplate(): KafkaReceiver<String, CreditPayedEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
         receiverOptions = ReceiverOptions.create(props)
-        receiverOptions = receiverOptions.withValueDeserializer(JsonDeserializer(CreditPayedEvent::class.java))
+        receiverOptions =
+            receiverOptions.withValueDeserializer(JsonDeserializer(CreditPayedEvent::class.java))
         receiverOptions = receiverOptions.subscription(setOf(topic))
         return KafkaReceiver.create(receiverOptions)
     }

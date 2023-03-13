@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono
 
 @Service
 interface CreditService {
-    fun takeCredit(credit: Credit): Mono<Boolean>
+    fun takeCredit(credit: Credit): Mono<Credit>
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class BorrowerServiceImpl(val borrowerRepository: BorrowerRepository) : BorrowerService {
-    override fun register(borrower: Borrower?): Mono<Boolean> {
+class BorrowerServiceImpl(private val borrowerRepository: BorrowerRepository) : BorrowerService {
+    override fun register(borrower: Borrower): Mono<Borrower> {
         return borrowerRepository.save(borrower)
     }
 }

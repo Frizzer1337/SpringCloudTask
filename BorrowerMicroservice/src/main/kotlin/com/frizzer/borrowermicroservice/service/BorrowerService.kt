@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-interface BorrowerService{
-    fun register(borrower: Borrower?): Mono<Boolean>
+interface BorrowerService {
+    fun register(borrower: Borrower): Mono<Borrower>
 }

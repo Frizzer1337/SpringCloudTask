@@ -1,4 +1,4 @@
-package com.frizzer.kafkaapi.entity;
+package com.frizzer.kafkaapi.entity
 
 
 data class Borrower(
@@ -8,6 +8,4 @@ data class Borrower(
     var phone: String,
     var salary: Int,
     var socialCredit: Double
-){
-    constructor() : this("1","1","1","1",0,0.0)
-}
+)

@@ -11,7 +11,7 @@ import reactor.kafka.receiver.KafkaReceiver
 import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
-class KafkaCreditCollectorConfig {
+open class KafkaCreditCollectorConfig {
     private lateinit var receiverOptions: ReceiverOptions<String, CollectorEvent>
 
     @Value(value = "\${kafka.bootstrapAddress}")
@@ -24,14 +24,15 @@ class KafkaCreditCollectorConfig {
     private val topic: String? = null
 
     @Bean
-    fun kafkaCreditCollectorConsumerFactoryTemplate(): KafkaReceiver<String, CollectorEvent> {
+    open fun kafkaCreditCollectorConsumerFactoryTemplate(): KafkaReceiver<String, CollectorEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
         receiverOptions = ReceiverOptions.create(props)
-        receiverOptions = receiverOptions.withValueDeserializer(JsonDeserializer(CollectorEvent::class.java))
+        receiverOptions =
+            receiverOptions.withValueDeserializer(JsonDeserializer(CollectorEvent::class.java))
         receiverOptions = receiverOptions.subscription(setOf(topic))
         return KafkaReceiver.create(receiverOptions)
     }

@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class CreditRepositoryConfiguration (private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
+open class CreditRepositoryConfiguration(private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
     @Bean
-    fun creditRepository(): CreditRepository {
+    open fun creditRepository(): CreditRepository {
         return MongoCreditRepository(
             borrowerMongoConfiguration.database().getCollection("credit", Credit::class.java)
         )

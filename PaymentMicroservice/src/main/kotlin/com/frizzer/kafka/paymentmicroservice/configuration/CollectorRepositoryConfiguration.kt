@@ -7,11 +7,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class CollectorRepositoryConfiguration (private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
+open class CollectorRepositoryConfiguration(private val borrowerMongoConfiguration: BorrowerMongoConfiguration) {
     @Bean
-    fun collectorRepository(): CollectorRepository {
+    open fun collectorRepository(): CollectorRepository {
         return MongoCollectorRepository(
-            borrowerMongoConfiguration.database().getCollection("collectorCredit", CollectorCredit::class.java)
+            borrowerMongoConfiguration.database()
+                .getCollection("collectorCredit", CollectorCredit::class.java)
         )
     }
 }

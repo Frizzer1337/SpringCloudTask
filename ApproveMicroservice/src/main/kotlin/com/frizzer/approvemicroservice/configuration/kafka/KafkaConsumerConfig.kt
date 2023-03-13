@@ -11,7 +11,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
-class KafkaConsumerConfig {
+open class KafkaConsumerConfig {
 
     private lateinit var receiverOptions: ReceiverOptions<String, Credit>
 
@@ -25,7 +25,7 @@ class KafkaConsumerConfig {
     private val topic: String? = null
 
     @Bean
-    fun kafkaConsumerFactoryTemplate(): ReactiveKafkaConsumerTemplate<String, Credit>? {
+    open fun kafkaConsumerFactoryTemplate(): ReactiveKafkaConsumerTemplate<String, Credit>? {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
