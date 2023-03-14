@@ -1,6 +1,6 @@
 package com.frizzer.approveapi.configuration.kafka
 
-import com.frizzer.contractapi.entity.Credit
+import com.frizzer.contractapi.entity.credit.Credit
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
@@ -12,28 +12,19 @@ import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
 open class KafkaConsumerConfig {
-
-    private lateinit var receiverOptions: ReceiverOptions<String, Credit>
-
-    @Value(value = "\${kafka.bootstrapAddress}")
-    private val bootstrapAddress: String? = null
-
-    @Value(value = "\${group.approve.id}")
-    private val groupId: String? = null
-
-    @Value(value = "\${topic.approve}")
-    private val topic: String? = null
-
     @Bean
-    open fun kafkaConsumerFactoryTemplate(): ReactiveKafkaConsumerTemplate<String, Credit>? {
+    open fun kafkaConsumerFactoryTemplate(
+        @Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String? = null,
+        @Value(value = "\${group.approve.id}") groupId: String? = null,
+        @Value(value = "\${topic.approve}") topic: String? = null
+    ): ReactiveKafkaConsumerTemplate<String, Credit>? {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
-        receiverOptions = ReceiverOptions.create(props)
+        var receiverOptions: ReceiverOptions<String, Credit> = ReceiverOptions.create(props)
         val deserializer = JsonDeserializer(Credit::class.java, false)
-        deserializer.addTrustedPackages("kafka.practice.*")
         receiverOptions = receiverOptions.withValueDeserializer(deserializer)
         receiverOptions = receiverOptions.subscription(setOf(topic))
         return ReactiveKafkaConsumerTemplate(receiverOptions)

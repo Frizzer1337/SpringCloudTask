@@ -1,6 +1,10 @@
 package com.frizzer.notificationapi.service.impl
 
-import com.frizzer.contractapi.entity.*
+import com.frizzer.contractapi.entity.collector.CollectorEvent
+import com.frizzer.contractapi.entity.credit.Credit
+import com.frizzer.contractapi.entity.credit.CreditCheckEvent
+import com.frizzer.contractapi.entity.credit.CreditPayedEvent
+import com.frizzer.contractapi.entity.payment.PaymentEvent
 import com.frizzer.notificationapi.service.NotificationService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

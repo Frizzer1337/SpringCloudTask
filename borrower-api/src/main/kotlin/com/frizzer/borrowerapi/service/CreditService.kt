@@ -1,7 +1,7 @@
 package com.frizzer.borrowerapi.service
 
 import com.frizzer.borrowerapi.repository.CreditRepository
-import com.frizzer.contractapi.entity.Credit
+import com.frizzer.contractapi.entity.credit.Credit
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service

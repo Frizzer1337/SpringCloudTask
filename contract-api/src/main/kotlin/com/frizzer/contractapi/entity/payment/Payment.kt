@@ -1,4 +1,4 @@
-package com.frizzer.contractapi.entity
+package com.frizzer.contractapi.entity.payment
 
 data class Payment(
     var id: String,

@@ -1,4 +1,4 @@
-package com.frizzer.contractapi.entity
+package com.frizzer.contractapi.entity.credit
 
 import java.time.LocalDate
 

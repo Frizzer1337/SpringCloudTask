@@ -1,5 +1,6 @@
-package com.frizzer.contractapi.entity
+package com.frizzer.contractapi.entity.collector
 
+import com.frizzer.contractapi.entity.credit.CreditStatus
 import java.time.LocalDate
 
 data class CollectorEvent(

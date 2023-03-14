@@ -1,6 +1,12 @@
 package com.frizzer.kafka.paymentapi.service.impl
 
-import com.frizzer.contractapi.entity.*
+import com.frizzer.contractapi.entity.collector.CollectorCredit
+import com.frizzer.contractapi.entity.collector.CollectorEvent
+import com.frizzer.contractapi.entity.credit.Credit
+import com.frizzer.contractapi.entity.credit.CreditPayedEvent
+import com.frizzer.contractapi.entity.credit.CreditStatus
+import com.frizzer.contractapi.entity.payment.Payment
+import com.frizzer.contractapi.entity.payment.PaymentEvent
 import com.frizzer.kafka.paymentapi.repository.CreditRepository
 import com.frizzer.kafka.paymentapi.service.CollectorService
 import com.frizzer.kafka.paymentapi.service.CreditService
@@ -90,7 +96,10 @@ open class CreditServiceImpl(
         val yesterday = LocalDateTime.now().minusDays(1).toString()
         log.info("Credit's were checked")
         return creditRepository
-            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(yesterday, CreditStatus.APPROVED)
+            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
+                yesterday,
+                CreditStatus.APPROVED
+            )
             .flatMap { credit ->
                 credit.creditBalance = credit.creditBalance + standardPenalty
                 credit.penalty = credit.penalty + standardPenalty
@@ -104,7 +113,10 @@ open class CreditServiceImpl(
         val creditNeedCollectorMultiplier = 0.5
         val yesterday = LocalDateTime.now().minusDays(1).toString()
         return creditRepository
-            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(yesterday, CreditStatus.APPROVED)
+            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
+                yesterday,
+                CreditStatus.APPROVED
+            )
             .filter { credit -> credit.penalty > credit.creditBalance * creditNeedCollectorMultiplier }
             .flatMap { credit ->
                 credit.creditStatus = CreditStatus.NEED_COLLECTOR
@@ -141,7 +153,10 @@ open class CreditServiceImpl(
         val bigPenaltyMultiplier = 0.3
         val yesterday = LocalDateTime.now().minusDays(1).toString()
         return creditRepository
-            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(yesterday, CreditStatus.APPROVED)
+            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
+                yesterday,
+                CreditStatus.APPROVED
+            )
             .filter { credit -> credit.penalty > credit.creditBalance * bigPenaltyMultiplier }
             .doOnNext { x -> log.warn("Credit have big penalty {}", x) }
             .subscribe()

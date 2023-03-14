@@ -1,6 +1,6 @@
 package com.frizzer.notificationapi.configuration
 
-import com.frizzer.contractapi.entity.CreditPayedEvent
+import com.frizzer.contractapi.entity.credit.CreditPayedEvent
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
@@ -12,26 +12,19 @@ import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
 open class KafkaCreditPayedConfig {
-
-    private lateinit var receiverOptions: ReceiverOptions<String, CreditPayedEvent>
-
-    @Value(value = "\${kafka.bootstrapAddress}")
-    private val bootstrapAddress: String? = null
-
-    @Value(value = "\${group.id}")
-    private val groupId: String? = null
-
-    @Value(value = "\${topic.payed}")
-    private val topic: String? = null
-
     @Bean
-    open fun kafkaCreditPayedConsumerFactoryTemplate(): KafkaReceiver<String, CreditPayedEvent> {
+    open fun kafkaCreditPayedConsumerFactoryTemplate(
+        @Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String? = null,
+        @Value(value = "\${group.id}") groupId: String? = null,
+        @Value(value = "\${topic.payed}") topic: String? = null
+    ): KafkaReceiver<String, CreditPayedEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
-        receiverOptions = ReceiverOptions.create(props)
+        var receiverOptions: ReceiverOptions<String, CreditPayedEvent> =
+            ReceiverOptions.create(props)
         receiverOptions =
             receiverOptions.withValueDeserializer(JsonDeserializer(CreditPayedEvent::class.java))
         receiverOptions = receiverOptions.subscription(setOf(topic))

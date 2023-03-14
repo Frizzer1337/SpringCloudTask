@@ -1,5 +1,6 @@
-package com.frizzer.contractapi.entity
+package com.frizzer.contractapi.entity.collector
 
+import com.frizzer.contractapi.entity.credit.Credit
 import org.bson.types.ObjectId
 import java.time.LocalDateTime
 

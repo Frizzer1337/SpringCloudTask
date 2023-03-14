@@ -1,6 +1,6 @@
 package com.frizzer.kafka.paymentapi.configuration.kafka
 
-import com.frizzer.contractapi.entity.CreditPayedEvent
+import com.frizzer.contractapi.entity.credit.CreditPayedEvent
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -12,10 +12,8 @@ import reactor.kafka.sender.SenderOptions
 
 @Configuration
 open class CreditEventProducerConfiguration {
-
-
     @Bean
-    open fun reactiveCreditEventKafkaTemplate( @Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String?): ReactiveKafkaProducerTemplate<String, CreditPayedEvent> {
+    open fun reactiveCreditEventKafkaTemplate(@Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String?): ReactiveKafkaProducerTemplate<String, CreditPayedEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java

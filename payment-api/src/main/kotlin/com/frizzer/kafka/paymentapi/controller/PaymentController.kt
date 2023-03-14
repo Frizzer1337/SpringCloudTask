@@ -1,8 +1,8 @@
 package com.frizzer.kafka.paymentapi.controller
 
+import com.frizzer.contractapi.entity.credit.Credit
+import com.frizzer.contractapi.entity.payment.Payment
 import com.frizzer.kafka.paymentapi.service.impl.CreditServiceImpl
-import com.frizzer.contractapi.entity.Credit
-import com.frizzer.contractapi.entity.Payment
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

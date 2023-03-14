@@ -8,11 +8,8 @@ import org.springframework.kafka.core.KafkaAdmin
 
 @Configuration
 open class KafkaTopicConfig {
-    @Value(value = "\${kafka.bootstrapAddress}")
-    private val bootstrapAddress: String? = null
-
     @Bean
-    open fun kafkaAdmin(): KafkaAdmin {
+    open fun kafkaAdmin(@Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String? = null): KafkaAdmin {
         val configs: MutableMap<String, Any?> = HashMap()
         configs[AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         return KafkaAdmin(configs)

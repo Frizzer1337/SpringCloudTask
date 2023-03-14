@@ -3,21 +3,6 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>contract-api</artifactId>
-  <description>contract-api</description>
-  <groupId>com.frizzer</groupId>
-  <modelVersion>4.0.0</modelVersion>
-  <name>contract-api</name>
-  <parent>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <groupId>org.springframework.boot</groupId>
-    <relativePath/>
-    <version>3.0.1</version>
-  </parent>
-  <properties>
-    <java.version>17</java.version>
-    <kotlin.version>1.7.22</kotlin.version>
-  </properties>
-  <version>0.0.1-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -74,4 +59,19 @@
       <groupId>com.fasterxml.jackson.core</groupId>
     </dependency>
   </dependencies>
+  <description>contract-api</description>
+  <groupId>com.frizzer</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <name>contract-api</name>
+  <parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <relativePath/>
+    <version>3.0.1</version>
+  </parent>
+  <properties>
+    <java.version>17</java.version>
+    <kotlin.version>1.7.22</kotlin.version>
+  </properties>
+  <version>0.0.1-SNAPSHOT</version>
 </project>

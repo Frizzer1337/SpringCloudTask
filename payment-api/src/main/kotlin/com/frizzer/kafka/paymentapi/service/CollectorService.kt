@@ -1,7 +1,7 @@
 package com.frizzer.kafka.paymentapi.service
 
+import com.frizzer.contractapi.entity.collector.CollectorCredit
 import com.frizzer.kafka.paymentapi.repository.CollectorRepository
-import com.frizzer.contractapi.entity.CollectorCredit
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 

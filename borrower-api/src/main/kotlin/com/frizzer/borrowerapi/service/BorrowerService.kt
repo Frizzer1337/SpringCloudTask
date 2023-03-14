@@ -1,7 +1,7 @@
 package com.frizzer.borrowerapi.service
 
 import com.frizzer.borrowerapi.repository.BorrowerRepository
-import com.frizzer.contractapi.entity.Borrower
+import com.frizzer.contractapi.entity.borrower.Borrower
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 

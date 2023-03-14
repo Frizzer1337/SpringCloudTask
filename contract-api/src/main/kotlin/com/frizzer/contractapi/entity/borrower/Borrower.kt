@@ -1,4 +1,4 @@
-package com.frizzer.contractapi.entity
+package com.frizzer.contractapi.entity.borrower
 
 
 data class Borrower(

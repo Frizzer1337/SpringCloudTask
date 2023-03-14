@@ -1,5 +1,6 @@
-package com.frizzer.contractapi.entity
+package com.frizzer.contractapi.entity.payment
 
+import com.frizzer.contractapi.entity.credit.Credit
 import java.time.LocalDate
 
 data class PaymentEvent(val credit: Credit) {

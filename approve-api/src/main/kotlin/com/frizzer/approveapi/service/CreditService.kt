@@ -1,10 +1,10 @@
 package com.frizzer.approveapi.service
 
 import com.frizzer.approveapi.repository.CreditRepository
-import com.frizzer.contractapi.entity.Borrower
-import com.frizzer.contractapi.entity.Credit
-import com.frizzer.contractapi.entity.CreditCheckEvent
-import com.frizzer.contractapi.entity.CreditStatus
+import com.frizzer.contractapi.entity.borrower.Borrower
+import com.frizzer.contractapi.entity.credit.Credit
+import com.frizzer.contractapi.entity.credit.CreditCheckEvent
+import com.frizzer.contractapi.entity.credit.CreditStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationStartedEvent
@@ -26,7 +26,7 @@ class CreditService(
 
     private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
 
-//kafkaListener
+    //kafkaListener
     @EventListener(ApplicationStartedEvent::class)
     fun kafkaReceiving(): Flux<Credit> {
         return kafkaConsumer

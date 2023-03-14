@@ -3,8 +3,8 @@ package com.frizzer.borrowerapi.controller
 
 import com.frizzer.borrowerapi.service.BorrowerService
 import com.frizzer.borrowerapi.service.CreditService
-import com.frizzer.contractapi.entity.Borrower
-import com.frizzer.contractapi.entity.Credit
+import com.frizzer.contractapi.entity.borrower.Borrower
+import com.frizzer.contractapi.entity.credit.Credit
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

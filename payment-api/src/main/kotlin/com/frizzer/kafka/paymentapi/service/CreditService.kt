@@ -1,7 +1,7 @@
 package com.frizzer.kafka.paymentapi.service
 
-import com.frizzer.contractapi.entity.Credit
-import com.frizzer.contractapi.entity.Payment
+import com.frizzer.contractapi.entity.credit.Credit
+import com.frizzer.contractapi.entity.payment.Payment
 import reactor.core.Disposable
 import reactor.core.publisher.Mono
 
