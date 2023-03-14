@@ -5,8 +5,8 @@ import org.springframework.boot.runApplication
 
 
 @SpringBootApplication
-open class BorrowerMicroserviceApplication
+open class BorrowerApiApplication
 
 fun main(args: Array<String>) {
-    runApplication<BorrowerMicroserviceApplication>(*args)
+    runApplication<BorrowerApiApplication>(*args)
 }

@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-open class NotificationMicroserviceApplication
+open class NotificationApiApplication
 
 fun main(args: Array<String>) {
-    runApplication<NotificationMicroserviceApplication>(*args)
+    runApplication<NotificationApiApplication>(*args)
 }
