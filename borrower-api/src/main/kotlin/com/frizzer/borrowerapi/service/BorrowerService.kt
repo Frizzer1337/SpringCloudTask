@@ -10,4 +10,8 @@ class BorrowerService(private val borrowerRepository: BorrowerRepository) {
     fun register(borrower: Borrower): Mono<Borrower> {
         return borrowerRepository.save(borrower)
     }
+
+    fun findBorrowerById(id: String): Mono<Borrower> {
+        return borrowerRepository.findBorrowerById(id)
+    }
 }

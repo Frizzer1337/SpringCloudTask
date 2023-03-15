@@ -7,37 +7,28 @@ import com.frizzer.contractapi.entity.credit.CreditCheckEvent
 import com.frizzer.contractapi.entity.credit.CreditStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.boot.context.event.ApplicationStartedEvent
-import org.springframework.context.event.EventListener
-import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
 
 @Service
-class CreditService(
+open class CreditService(
     private val creditRepository: CreditRepository,
-    private val kafkaConsumer: ReactiveKafkaConsumerTemplate<String, Credit>,
     private val borrowerService: BorrowerService,
     private val kafkaTemplate: ReactiveKafkaProducerTemplate<String, CreditCheckEvent>
 ) {
 
     private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
 
-    //kafkaListener
-    @EventListener(ApplicationStartedEvent::class)
-    fun kafkaReceiving(): Flux<Credit> {
-        return kafkaConsumer
-            .receiveAutoAck()
-            .flatMap { record ->
-                borrowerService.findBorrowerById(record.value().borrowerId)
-                    .flatMap { borrower -> approve(record.value(), borrower) }
-            }
-            .flatMap { credit ->
-                sendCreditCheckEventKafka(credit).thenReturn(credit)
-            }
+    @Transactional
+    open fun save(credit: Credit): Mono<Credit> {
+        return creditRepository.save(credit)
+            .then(borrowerService
+                .findBorrowerById(credit.borrowerId)
+                .flatMap { approve(credit, it) })
+            .flatMap { sendCreditCheckEventKafka(it).thenReturn(it) }
     }
 
     private fun sendCreditCheckEventKafka(credit: Credit): Mono<SenderResult<Void>> {

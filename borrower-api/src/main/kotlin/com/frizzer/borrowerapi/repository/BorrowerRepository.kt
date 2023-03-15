@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono
 @Repository
 interface BorrowerRepository : ReactiveMongoRepository<Borrower, String> {
     fun save(borrower: Borrower): Mono<Borrower>
+
+    fun findBorrowerById(id: String): Mono<Borrower>
 }

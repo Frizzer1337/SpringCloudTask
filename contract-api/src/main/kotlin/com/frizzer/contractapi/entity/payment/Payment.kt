@@ -2,6 +2,7 @@ package com.frizzer.contractapi.entity.payment
 
 data class Payment(
     var id: String,
-    val payment: Int,
-    val creditId: String
+    var payment: Int,
+    var creditId: String,
+    var status : PaymentStatus = PaymentStatus.PENDING
 )
