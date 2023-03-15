@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>payment-api</artifactId>
+  <artifactId>credit-api</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -47,6 +47,11 @@
       <groupId>org.springframework.kafka</groupId>
     </dependency>
     <dependency>
+      <artifactId>log4j-core</artifactId>
+      <groupId>org.apache.logging.log4j</groupId>
+      <version>2.18.0</version>
+    </dependency>
+    <dependency>
       <artifactId>spring-boot-devtools</artifactId>
       <groupId>org.springframework.boot</groupId>
       <optional>true</optional>
@@ -61,6 +66,17 @@
       <artifactId>spring-kafka-test</artifactId>
       <groupId>org.springframework.kafka</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>feign-reactor-spring-cloud-starter</artifactId>
+      <groupId>com.playtika.reactivefeign</groupId>
+      <type>pom</type>
+      <version>3.1.2</version>
+    </dependency>
+    <dependency>
+      <artifactId>feign-slf4j</artifactId>
+      <groupId>io.github.openfeign</groupId>
+      <version>9.3.1</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
@@ -88,13 +104,27 @@
       <scope>test</scope>
       <version>${kotlin.version}</version>
     </dependency>
+    <dependency>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <version>${kotlin.version}</version>
+    </dependency>
   </dependencies>
-
-
-  <description>payment-api</description>
-  <groupId>com.frizzer.paymentapi</groupId>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>2021.0.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <description>credit-api</description>
+  <groupId>com.frizzer.kafka</groupId>
   <modelVersion>4.0.0</modelVersion>
-  <name>payment-api</name>
+  <name>credit-api</name>
   <parent>
     <artifactId>spring-boot-starter-parent</artifactId>
     <groupId>org.springframework.boot</groupId>

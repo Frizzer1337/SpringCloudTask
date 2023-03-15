@@ -7,6 +7,5 @@ interface NotificationService {
     fun kafkaReceivingCreditCheck(): Mono<Void>
     fun kafkaReceivingCreditPayed(): Mono<Void>
     fun kafkaReceivingCreditPayment(): Mono<Void>
-    fun kafkaReceivingCreditCollector(): Mono<Void>
 
 }

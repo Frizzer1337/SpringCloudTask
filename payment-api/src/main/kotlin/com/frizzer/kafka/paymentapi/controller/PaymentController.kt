@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono
 class PaymentController(private val creditService: CreditService) {
 
     @PostMapping("/pay")
-    fun register(@RequestBody payment: Payment): ResponseEntity<Mono<Credit>> {
+    fun pay(@RequestBody payment: Payment): ResponseEntity<Mono<Credit>> {
         return ResponseEntity.ok(creditService.payAndSavePayment(payment))
     }
 }

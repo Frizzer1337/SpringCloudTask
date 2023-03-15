@@ -1,6 +1,5 @@
 package com.frizzer.notificationapi.service.impl
 
-import com.frizzer.contractapi.entity.collector.CollectorEvent
 import com.frizzer.contractapi.entity.credit.Credit
 import com.frizzer.contractapi.entity.credit.CreditCheckEvent
 import com.frizzer.contractapi.entity.credit.CreditPayedEvent
@@ -19,12 +18,13 @@ class NotificationServiceImpl(
     private val kafkaReceiver: KafkaReceiver<String, Credit>,
     private val kafkaCreditCheckReceiver: KafkaReceiver<String, CreditCheckEvent>,
     private val kafkaCreditPayedReceiver: KafkaReceiver<String, CreditPayedEvent>,
-    private val kafkaCreditCollectorReceiver: KafkaReceiver<String, CollectorEvent>,
     private val kafkaCreditPaymentReceiver: KafkaReceiver<String, PaymentEvent>
 
 ) : NotificationService {
 
-    var log: Logger = LoggerFactory.getLogger(NotificationServiceImpl::class.java)
+    companion object {
+        var log: Logger = LoggerFactory.getLogger(NotificationServiceImpl::class.java)
+    }
 
     @EventListener(ApplicationStartedEvent::class)
     override fun kafkaReceivingCredit(): Mono<Void> {
@@ -66,19 +66,6 @@ class NotificationServiceImpl(
             .doOnNext { x ->
                 log.info(
                     "Credit {} had payment at offset: {}", x.value().javaClass, x.offset()
-                )
-            }.then()
-    }
-
-    @EventListener(ApplicationStartedEvent::class)
-    override fun kafkaReceivingCreditCollector(): Mono<Void> {
-        return kafkaCreditCollectorReceiver
-            .receive()
-            .doOnNext { x ->
-                log.info(
-                    "Credit {} was sent to collectors at offset: {}",
-                    x.value().javaClass,
-                    x.offset()
                 )
             }.then()
     }

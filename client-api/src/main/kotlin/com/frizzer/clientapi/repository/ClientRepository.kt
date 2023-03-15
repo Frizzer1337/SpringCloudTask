@@ -1,0 +1,13 @@
+package com.frizzer.clientapi.repository
+
+import com.frizzer.contractapi.entity.client.Client
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
+
+@Repository
+interface ClientRepository : ReactiveMongoRepository<Client, String> {
+    fun save(client: Client): Mono<Client>
+
+    fun findBorrowerById(id: String): Mono<Client>
+}

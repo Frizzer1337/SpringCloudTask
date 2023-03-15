@@ -13,17 +13,18 @@ import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
 import java.time.LocalDateTime
 
+
 @Service
 open class CreditService(
     private val creditRepository: CreditRepository,
     private val paymentService: PaymentService,
     private val kafkaTemplate: ReactiveKafkaProducerTemplate<String, PaymentEvent>,
 ) {
-    private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
+    companion object {
+        private val log : Logger = LoggerFactory.getLogger(CreditService::class.java)
+    }
 
-    //Need help
-    //Pays for credit after payment
-    fun pay(payment: Payment): Mono<Credit> {
+    private fun pay(payment: Payment): Mono<Credit> {
         return creditRepository.findCreditById(payment.creditId)
             .flatMap { credit ->
                 credit.creditBalance = credit.creditBalance - payment.payment
@@ -35,7 +36,7 @@ open class CreditService(
     }
 
 
-    fun sendPaymentEvent(credit: Credit): Mono<SenderResult<Void>> {
+    private fun sendPaymentEvent(credit: Credit): Mono<SenderResult<Void>> {
         return kafkaTemplate.send("CREDIT_PAYMENT", PaymentEvent(credit))
             .doOnSuccess { result ->
                 log.info(
@@ -49,6 +50,8 @@ open class CreditService(
 
     @Transactional
     open fun payAndSavePayment(payment: Payment): Mono<Credit> {
+
+
         return paymentService.save(payment).then(pay(payment))
     }
 
