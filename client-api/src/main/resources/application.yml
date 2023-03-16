@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      database: client
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+kafka:
+  bootstrap: localhost:9092
+server:
+  port: 7000

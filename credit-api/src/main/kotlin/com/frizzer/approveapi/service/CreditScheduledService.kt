@@ -6,6 +6,7 @@ import com.frizzer.contractapi.entity.credit.CreditPayedEvent
 import com.frizzer.contractapi.entity.credit.CreditStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -23,9 +24,24 @@ class CreditScheduledService(
         private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
     }
 
+    @Value(value = "\${credit.penalty.amount}")
+    private val standardPenalty = 50
+
+    @Value(value = "\${credit.penalty.days}")
+    private val amountOfDays = 1L
+
+    @Value(value = "\${credit.penalty.warn}")
+    private val bigPenaltyMultiplier = 0.3
+
+    @Value(value = "\${credit.penalty.collector}")
+    private val creditNeedCollectorMultiplier = 0.5
+
+    private val paymentDelayForPenalty = LocalDateTime.now().minusDays(amountOfDays).toString()
+
+    private val emptyBalance = 0
+
     @Scheduled(fixedDelay = 10000)
     fun changeStatusIfCreditPayed(): Disposable {
-        val emptyBalance = 0
         return creditRepository
             .findCreditsByCreditBalanceEqualsAndCreditStatusEquals(
                 emptyBalance,
@@ -34,18 +50,17 @@ class CreditScheduledService(
             .flatMap { credit ->
                 credit.creditStatus = CreditStatus.CREDIT_PAYED
                 creditRepository.save(credit)
-            }.flatMap { credit -> sendCreditPayedEvent(credit) }
+            }
+            .flatMap { credit -> sendCreditPayedEvent(credit) }
             .subscribe()
     }
 
     @Scheduled(fixedDelay = 10000)
     fun sendPenalty(): Disposable {
-        val standardPenalty = 50
-        val yesterday = LocalDateTime.now().minusDays(1).toString()
         log.info("Credit's were checked")
         return creditRepository
             .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
-                yesterday,
+                paymentDelayForPenalty,
                 CreditStatus.APPROVED
             )
             .flatMap { credit ->
@@ -58,11 +73,9 @@ class CreditScheduledService(
 
     @Scheduled(fixedDelay = 10000)
     fun changeStatusForBigPenalty(): Disposable {
-        val creditNeedCollectorMultiplier = 0.5
-        val yesterday = LocalDateTime.now().minusDays(1).toString()
         return creditRepository
             .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
-                yesterday,
+                paymentDelayForPenalty,
                 CreditStatus.APPROVED
             )
             .filter { credit -> credit.penalty > credit.creditBalance * creditNeedCollectorMultiplier }
@@ -89,11 +102,9 @@ class CreditScheduledService(
 
     @Scheduled(fixedDelay = 10000)
     fun sendWarnForBigPenalty(): Disposable {
-        val bigPenaltyMultiplier = 0.3
-        val yesterday = LocalDateTime.now().minusDays(1).toString()
         return creditRepository
             .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
-                yesterday,
+                paymentDelayForPenalty,
                 CreditStatus.APPROVED
             )
             .filter { credit -> credit.penalty > credit.creditBalance * bigPenaltyMultiplier }

@@ -1,6 +1,5 @@
 package com.frizzer.approveapi.service
 
-import com.frizzer.contractapi.entity.client.Client
 import com.frizzer.contractapi.entity.client.ClientDto
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.PathVariable

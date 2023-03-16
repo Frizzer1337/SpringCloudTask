@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+kafka:
+  bootstrap: localhost:9092
+  group:
+    id: creditConsumers
+  topic:
+    check: CREDIT_CHECK
+    payed : CREDIT_PAYED
+    payment: CREDIT_PAYMENT
+server:
+  port: 7001
+

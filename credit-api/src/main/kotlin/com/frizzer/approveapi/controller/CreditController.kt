@@ -1,10 +1,8 @@
 package com.frizzer.approveapi.controller
 
 import com.frizzer.approveapi.service.CreditService
-import com.frizzer.contractapi.entity.credit.Credit
 import com.frizzer.contractapi.entity.credit.CreditDto
 import com.frizzer.contractapi.entity.exception.PaymentApproveException
-import com.frizzer.contractapi.entity.payment.Payment
 import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

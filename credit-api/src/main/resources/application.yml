@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      database: credit
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+kafka:
+  bootstrap: localhost:9092
+  topic:
+    payed: CREDIT_PAYED
+    check: CREDIT_CHECK
+credit:
+  penalty:
+    amount: 50
+    warn: 0.3
+    collector: 0.5
+    days: 1
+  rate:
+    auto: 120
+    human: 100
+  modifier:
+    salary: 10
+    creditBalance: 0.2
+    socialCredit: 1.5
+
+

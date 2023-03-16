@@ -8,6 +8,7 @@ import com.frizzer.contractapi.entity.exception.PaymentApproveException
 import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -25,16 +26,34 @@ open class CreditService(
         private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
     }
 
+    @Value(value = "\${credit.modifier.salary}")
+    private val salaryModifier: Double = 1.0
+
+    @Value(value = "\${credit.modifier.socialCredit}")
+    private val socialCreditModifier: Double = 1.0
+
+    @Value(value = "\${credit.modifier.creditBalance}")
+    private val creditBalanceModifier: Double = 1.0
+
+    @Value(value = "\${credit.rate.auto}")
+    private val approveRate: Double = 1.0
+
+    @Value(value = "\${credit.rate.human}")
+    private val humanApproveRate: Double = 1.0
+
+    @Value(value = "\${kafka.topic.check}")
+    private val creditCheckTopic: String = ""
+
     open fun save(creditDto: CreditDto): Mono<CreditDto> {
         return creditRepository.save(creditDto.fromDto())
-            .then(clientService
-                .findClientById(creditDto.clientId)
+            .then(clientService.findClientById(creditDto.clientId)
                 .flatMap { approve(creditDto, it.fromDto()) })
             .flatMap { sendCreditCheckEventKafka(it.toDto()).thenReturn(it.toDto()) }
     }
 
     open fun pay(paymentDto: PaymentDto): Mono<CreditDto> {
-        return creditRepository.findCreditById(paymentDto.creditId)
+        return creditRepository
+            .findCreditById(paymentDto.creditId)
             .flatMap { credit ->
                 credit.creditBalance = credit.creditBalance - paymentDto.payment
                 credit.penalty = credit.penalty - paymentDto.payment
@@ -48,39 +67,36 @@ open class CreditService(
 
     private fun sendCreditCheckEventKafka(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaTemplate.send(
-            "CREDIT_CHECKED",
-            CreditCheckEvent(credit.id, credit.creditStatus)
-        )
-            .doOnSuccess { result ->
-                log.info(
-                    "sent {} offset: {}",
-                    CreditCheckEvent(credit.id, credit.creditStatus),
-                    result.recordMetadata().offset()
-                )
-            }
+            creditCheckTopic, CreditCheckEvent(credit.id, credit.creditStatus)
+        ).doOnSuccess { result ->
+            log.info(
+                "sent {} offset: {}",
+                CreditCheckEvent(credit.id, credit.creditStatus),
+                result.recordMetadata().offset()
+            )
+        }
     }
 
-    private fun approve(credit: CreditDto, client: Client): Mono<Credit> {
-        val socialCreditModifier = 1.5
-        val salaryModifier = 10.0
-        val creditBalanceModifier = 0.2
-        val creditRate: Double = (client.socialCredit * socialCreditModifier + client.salary
-                * salaryModifier - credit.creditBalance * creditBalanceModifier)
+    private fun approve(
+        credit: CreditDto,
+        client: Client,
+    ): Mono<Credit> {
+        val creditRate: Double =
+            (client.socialCredit * socialCreditModifier + client.salary * salaryModifier - credit.creditBalance * creditBalanceModifier)
         return approveByCreditRate(creditRate, credit)
 
     }
 
-    private fun approveByCreditRate(creditRate: Double, credit: CreditDto): Mono<Credit> {
-        val approveRate = 120.0
-        val humanApproveRate = 100.0
-        credit.creditStatus = getCreditStatus(creditRate, approveRate, humanApproveRate)
+    private fun approveByCreditRate(
+        creditRate: Double,
+        credit: CreditDto,
+    ): Mono<Credit> {
+        credit.creditStatus = getCreditStatus(creditRate)
         return creditRepository.save(credit.fromDto())
     }
 
     private fun getCreditStatus(
-        creditRate: Double,
-        approveRate: Double,
-        humanApproveRate: Double
+        creditRate: Double
     ) = if (creditRate > approveRate) {
         CreditStatus.APPROVED
     } else if (creditRate > humanApproveRate) {

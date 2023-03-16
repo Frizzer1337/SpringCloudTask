@@ -13,7 +13,7 @@ import reactor.kafka.sender.SenderOptions
 @Configuration
 open class KafkaProducerConfig {
     @Bean
-    open fun reactiveKafkaTemplate(@Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String? = null): ReactiveKafkaProducerTemplate<String, Credit> {
+    open fun reactiveKafkaTemplate(@Value(value = "\${kafka.bootstrap}") bootstrapAddress: String? = null): ReactiveKafkaProducerTemplate<String, Credit> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java

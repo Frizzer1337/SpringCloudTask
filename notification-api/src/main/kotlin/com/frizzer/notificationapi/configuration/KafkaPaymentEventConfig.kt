@@ -6,20 +6,18 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import reactor.kafka.receiver.ReceiverOptions
 import java.util.*
 
 @Configuration
-@EnableKafka
 open class KafkaPaymentEventConfig {
     @Bean
     open fun kafkaPaymentEventConsumerFactoryTemplate(
-        @Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String? = null,
-        @Value(value = "\${group.id}") groupId: String? = null,
-        @Value(value = "\${topic.payment}") topic: String? = null
+        @Value(value = "\${kafka.bootstrap}") bootstrapAddress: String? = null,
+        @Value(value = "\${kafka.group.id}") groupId: String? = null,
+        @Value(value = "\${kafka.topic.payment}") topic: String? = null
     ): ReceiverOptions<String, PaymentEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress

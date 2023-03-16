@@ -4,6 +4,7 @@ import com.frizzer.contractapi.entity.payment.*
 import com.frizzer.kafka.paymentapi.repository.PaymentRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -20,8 +21,13 @@ open class PaymentService(
         private val log: Logger = LoggerFactory.getLogger(PaymentService::class.java)
     }
 
-    private fun sendPaymentEvent(payment: PaymentDto): Mono<SenderResult<Void>> {
-        return kafkaTemplate.send("CREDIT_PAYMENT", PaymentEvent(payment.id, payment.status))
+    @Value(value = "\${kafka.topic.payment}")
+    private val creditPaymentTopic: String = ""
+
+    private fun sendPaymentEvent(
+        payment: PaymentDto
+    ): Mono<SenderResult<Void>> {
+        return kafkaTemplate.send(creditPaymentTopic, PaymentEvent(payment.id, payment.status))
             .doOnSuccess { result ->
                 log.info(
                     "Credit payment event sent {} offset: {}",

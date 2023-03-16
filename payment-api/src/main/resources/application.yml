@@ -1,0 +1,13 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+  data:
+    mongodb:
+      database: payment
+kafka:
+  bootstrap: localhost:9092
+  topic :
+    payment: CREDIT_PAYMENT
+server:
+  port: 7002

@@ -5,13 +5,16 @@ import com.frizzer.contractapi.entity.client.ClientDto
 import com.frizzer.contractapi.entity.client.fromDto
 import com.frizzer.contractapi.entity.client.toDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 
 @Service
-class ClientService(
+open class ClientService(
     private val clientRepository: ClientRepository,
 ) {
-    fun save(clientDto: ClientDto): Mono<ClientDto> {
+
+    @Transactional
+    open fun save(clientDto: ClientDto): Mono<ClientDto> {
         return clientRepository
             .save(clientDto.fromDto())
             .map { it.toDto() }
