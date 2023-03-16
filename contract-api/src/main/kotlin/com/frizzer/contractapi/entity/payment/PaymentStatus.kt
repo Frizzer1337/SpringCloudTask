@@ -1,6 +1,6 @@
 package com.frizzer.contractapi.entity.payment
 
-enum class PaymentStatus{
+enum class PaymentStatus {
     PENDING,
     APPROVED,
     CANCELED

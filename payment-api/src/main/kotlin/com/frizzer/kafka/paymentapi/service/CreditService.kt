@@ -1,7 +1,7 @@
 package com.frizzer.kafka.paymentapi.service
 
-import com.frizzer.contractapi.entity.credit.Credit
-import com.frizzer.contractapi.entity.payment.Payment
+import com.frizzer.contractapi.entity.credit.CreditDto
+import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -12,6 +12,6 @@ import reactor.core.publisher.Mono
 @Service
 interface CreditService {
     @RequestMapping(method = [RequestMethod.POST], value = ["/pay"])
-    fun paySagaInCreditApi(payment: Payment): Mono<Credit>
+    fun paySagaCreditApi(payment: PaymentDto): Mono<CreditDto>
 
 }

@@ -1,6 +1,6 @@
 package com.frizzer.kafka.paymentapi.controller
 
-import com.frizzer.contractapi.entity.payment.Payment
+import com.frizzer.contractapi.entity.payment.PaymentDto
 import com.frizzer.kafka.paymentapi.service.PaymentService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 class PaymentController(private val paymentService: PaymentService) {
 
     @PostMapping("/pay")
-    fun pay(@RequestBody payment: Payment): ResponseEntity<Mono<Payment>> {
-        return ResponseEntity.ok(paymentService.pay(payment))
+    fun pay(@RequestBody paymentDto : PaymentDto): ResponseEntity<Mono<PaymentDto>> {
+        return ResponseEntity.ok(paymentService.pay(paymentDto))
     }
 }

@@ -1,6 +1,7 @@
 package com.frizzer.approveapi.service
 
 import com.frizzer.contractapi.entity.client.Client
+import com.frizzer.contractapi.entity.client.ClientDto
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,5 +13,5 @@ import reactor.core.publisher.Mono
 @Service
 interface ClientService {
     @RequestMapping(method = [RequestMethod.GET], value = ["/{id}"])
-    fun findClientById(@PathVariable("id") clientId: String): Mono<Client>
+    fun findClientById(@PathVariable("id") clientId: String): Mono<ClientDto>
 }

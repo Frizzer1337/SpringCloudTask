@@ -2,9 +2,10 @@ package com.frizzer.approveapi.service
 
 import com.frizzer.approveapi.repository.CreditRepository
 import com.frizzer.contractapi.entity.client.Client
+import com.frizzer.contractapi.entity.client.fromDto
 import com.frizzer.contractapi.entity.credit.*
 import com.frizzer.contractapi.entity.exception.PaymentApproveException
-import com.frizzer.contractapi.entity.payment.Payment
+import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
@@ -28,19 +29,22 @@ open class CreditService(
         return creditRepository.save(creditDto.fromDto())
             .then(clientService
                 .findClientById(creditDto.clientId)
-                .flatMap { approve(creditDto, it) })
+                .flatMap { approve(creditDto, it.fromDto()) })
             .flatMap { sendCreditCheckEventKafka(it.toDto()).thenReturn(it.toDto()) }
     }
 
-    open fun pay(payment: Payment): Mono<Credit> {
-        return creditRepository.findCreditById(payment.creditId)
+    open fun pay(paymentDto: PaymentDto): Mono<CreditDto> {
+        return creditRepository.findCreditById(paymentDto.creditId)
             .flatMap { credit ->
-                credit.creditBalance = credit.creditBalance - payment.payment
-                credit.penalty = credit.penalty - payment.payment
+                credit.creditBalance = credit.creditBalance - paymentDto.payment
+                credit.penalty = credit.penalty - paymentDto.payment
                 credit.lastPaymentDate = LocalDateTime.now().toString()
                 creditRepository.save(credit)
-            }.doOnError { throw PaymentApproveException("Error while changing credit") }
+            }
+            .map { it.toDto() }
+            .doOnError { throw PaymentApproveException("Error while changing credit") }
     }
+
 
     private fun sendCreditCheckEventKafka(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaTemplate.send(

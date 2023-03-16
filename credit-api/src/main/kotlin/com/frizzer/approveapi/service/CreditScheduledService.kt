@@ -74,7 +74,10 @@ class CreditScheduledService(
     }
 
     private fun sendCreditPayedEvent(credit: Credit): Mono<SenderResult<Void>> {
-        return kafkaCreditPayedTemplate.send("CREDIT_PAYED", CreditPayedEvent(credit.id,credit.creditStatus))
+        return kafkaCreditPayedTemplate.send(
+            "CREDIT_PAYED",
+            CreditPayedEvent(credit.id, credit.creditStatus)
+        )
             .doOnSuccess { result ->
                 log.info(
                     "Credit payed event sent {} offset: {}",

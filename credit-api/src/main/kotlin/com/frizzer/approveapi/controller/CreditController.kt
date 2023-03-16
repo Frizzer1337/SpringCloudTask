@@ -5,6 +5,7 @@ import com.frizzer.contractapi.entity.credit.Credit
 import com.frizzer.contractapi.entity.credit.CreditDto
 import com.frizzer.contractapi.entity.exception.PaymentApproveException
 import com.frizzer.contractapi.entity.payment.Payment
+import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -22,8 +23,8 @@ class CreditController(
     }
 
     @PostMapping("/pay")
-    fun pay(@RequestBody payment: Payment): ResponseEntity<Mono<Credit>> {
-        return ResponseEntity.ok(creditService.pay(payment))
+    fun pay(@RequestBody paymentDto: PaymentDto): ResponseEntity<Mono<CreditDto>> {
+        return ResponseEntity.ok(creditService.pay(paymentDto))
     }
 
     @ExceptionHandler(PaymentApproveException::class)

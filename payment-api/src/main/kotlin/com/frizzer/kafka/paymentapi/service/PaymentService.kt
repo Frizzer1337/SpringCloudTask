@@ -1,8 +1,6 @@
 package com.frizzer.kafka.paymentapi.service
 
-import com.frizzer.contractapi.entity.payment.Payment
-import com.frizzer.contractapi.entity.payment.PaymentEvent
-import com.frizzer.contractapi.entity.payment.PaymentStatus
+import com.frizzer.contractapi.entity.payment.*
 import com.frizzer.kafka.paymentapi.repository.PaymentRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,7 +20,7 @@ open class PaymentService(
         private val log: Logger = LoggerFactory.getLogger(PaymentService::class.java)
     }
 
-    private fun sendPaymentEvent(payment: Payment): Mono<SenderResult<Void>> {
+    private fun sendPaymentEvent(payment: PaymentDto): Mono<SenderResult<Void>> {
         return kafkaTemplate.send("CREDIT_PAYMENT", PaymentEvent(payment.id, payment.status))
             .doOnSuccess { result ->
                 log.info(
@@ -33,14 +31,13 @@ open class PaymentService(
             }
     }
 
-    open fun pay(payment: Payment): Mono<Payment> {
-
-        return paymentRepository.save(payment)
-            .then(creditService.paySagaInCreditApi(payment))
-            .doOnSuccess { payment.status = PaymentStatus.APPROVED }
-            .doOnError { payment.status = PaymentStatus.CANCELED }
-            .then(paymentRepository.save(payment))
-            .flatMap { sendPaymentEvent(it).thenReturn(it) }
+    open fun pay(paymentDto: PaymentDto): Mono<PaymentDto> {
+        return paymentRepository.save(paymentDto.fromDto())
+            .then(creditService.paySagaCreditApi(paymentDto))
+            .doOnSuccess { paymentDto.status = PaymentStatus.APPROVED }
+            .doOnError { paymentDto.status = PaymentStatus.CANCELED }
+            .then(paymentRepository.save(paymentDto.fromDto()))
+            .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
     }
 
 }
