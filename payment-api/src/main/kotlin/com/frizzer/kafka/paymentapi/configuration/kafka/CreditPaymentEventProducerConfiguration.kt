@@ -11,7 +11,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 import reactor.kafka.sender.SenderOptions
 
 @Configuration
-open class CreditEventProducerConfiguration {
+open class CreditPaymentEventProducerConfiguration {
     @Bean
     open fun reactiveCreditEventKafkaTemplate(@Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String?): ReactiveKafkaProducerTemplate<String, PaymentEvent> {
         val props: MutableMap<String, Any?> = HashMap()

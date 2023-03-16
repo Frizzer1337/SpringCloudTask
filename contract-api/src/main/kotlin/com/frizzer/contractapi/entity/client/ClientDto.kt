@@ -1,7 +1,9 @@
 package com.frizzer.contractapi.entity.client
 
-data class Client(
-    var id: String,
+import org.bson.types.ObjectId
+
+data class ClientDto(
+    var id: String = ObjectId().toString(),
     var name: String,
     var surname: String,
     var phone: String,
@@ -9,7 +11,7 @@ data class Client(
     var socialCredit: Double
 )
 
-fun Client.toDto() = ClientDto(
+fun ClientDto.fromDto() = Client(
     id = id,
     name = name,
     surname = surname,

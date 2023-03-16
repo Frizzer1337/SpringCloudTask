@@ -1,15 +1,17 @@
 package com.frizzer.contractapi.entity.credit
 
-data class Credit(
-    var id: String,
+import org.bson.types.ObjectId
+
+data class CreditDto(
+    var id: String = ObjectId().toString(),
     var lastPaymentDate: String,
     var creditBalance: Int,
     var penalty: Int,
     var clientId: String,
-    var creditStatus: CreditStatus
+    var creditStatus: CreditStatus = CreditStatus.CREATED
 )
 
-fun Credit.toDto() = CreditDto(
+fun CreditDto.fromDto() = Credit(
     id = id,
     lastPaymentDate = lastPaymentDate,
     creditBalance = creditBalance,

@@ -63,6 +63,17 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <artifactId>feign-reactor-spring-cloud-starter</artifactId>
+      <groupId>com.playtika.reactivefeign</groupId>
+      <type>pom</type>
+      <version>3.1.2</version>
+    </dependency>
+    <dependency>
+      <artifactId>feign-slf4j</artifactId>
+      <groupId>io.github.openfeign</groupId>
+      <version>9.3.1</version>
+    </dependency>
+    <dependency>
       <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
@@ -88,11 +99,25 @@
       <scope>test</scope>
       <version>${kotlin.version}</version>
     </dependency>
+    <dependency>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <version>${kotlin.version}</version>
+    </dependency>
   </dependencies>
-
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>2021.0.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <description>payment-api</description>
-  <groupId>com.frizzer.paymentapi</groupId>
+  <groupId>com.frizzer.kafka</groupId>
   <modelVersion>4.0.0</modelVersion>
   <name>payment-api</name>
   <parent>

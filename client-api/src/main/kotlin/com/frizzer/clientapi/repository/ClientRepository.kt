@@ -9,5 +9,5 @@ import reactor.core.publisher.Mono
 interface ClientRepository : ReactiveMongoRepository<Client, String> {
     fun save(client: Client): Mono<Client>
 
-    fun findBorrowerById(id: String): Mono<Client>
+    fun findClientById(id: String): Mono<Client>
 }

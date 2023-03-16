@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka
+import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate
 import org.springframework.kafka.support.serializer.JsonDeserializer
-import reactor.kafka.receiver.KafkaReceiver
 import reactor.kafka.receiver.ReceiverOptions
+import java.util.*
 
 @Configuration
 @EnableKafka
@@ -19,7 +20,7 @@ open class KafkaCreditCheckReceiverConfig {
         @Value(value = "\${kafka.bootstrapAddress}") bootstrapAddress: String? = null,
         @Value(value = "\${group.id}") groupId: String? = null,
         @Value(value = "\${topic.check}") topic: String? = null
-    ): KafkaReceiver<String, CreditCheckEvent> {
+    ): ReceiverOptions<String, CreditCheckEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
@@ -30,7 +31,12 @@ open class KafkaCreditCheckReceiverConfig {
         receiverOptions =
             receiverOptions.withValueDeserializer(JsonDeserializer(CreditCheckEvent::class.java))
         receiverOptions = receiverOptions.subscription(setOf(topic))
-        return KafkaReceiver.create(receiverOptions)
+        return receiverOptions.subscription(Collections.singletonList(topic))
+    }
+
+    @Bean
+    open fun reactiveKafkaCreditCheckConsumerTemplate(kafkaReceiverOptions: ReceiverOptions<String, CreditCheckEvent>): ReactiveKafkaConsumerTemplate<String, CreditCheckEvent> {
+        return ReactiveKafkaConsumerTemplate(kafkaReceiverOptions)
     }
 
 }

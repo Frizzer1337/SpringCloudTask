@@ -33,6 +33,12 @@
   </build>
   <dependencies>
     <dependency>
+      <artifactId>symbol-processing-api</artifactId>
+      <groupId>com.google.devtools.ksp</groupId>
+      <scope>runtime</scope>
+      <version>1.8.20-RC-1.0.9</version>
+    </dependency>
+    <dependency>
       <artifactId>jackson-module-kotlin</artifactId>
       <groupId>com.fasterxml.jackson.module</groupId>
       <version>2.14.2</version>
@@ -49,6 +55,11 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <groupId>org.springframework.boot</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>mapstruct</artifactId>
+      <groupId>org.mapstruct</groupId>
+      <version>1.5.3.Final</version>
     </dependency>
     <dependency>
       <artifactId>bson</artifactId>

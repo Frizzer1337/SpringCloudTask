@@ -12,5 +12,5 @@ import reactor.core.publisher.Mono
 @Service
 interface ClientService {
     @RequestMapping(method = [RequestMethod.GET], value = ["/{id}"])
-    fun findBorrowerById(@PathVariable("id") clientId: String): Mono<Client>
+    fun findClientById(@PathVariable("id") clientId: String): Mono<Client>
 }
