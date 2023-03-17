@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
 import java.time.LocalDateTime
@@ -44,6 +45,7 @@ open class CreditService(
     @Value(value = "\${kafka.topic.check}")
     private val creditCheckTopic: String = ""
 
+    @Transactional
     open fun save(creditDto: CreditDto): Mono<CreditDto> {
         return creditRepository.save(creditDto.fromDto())
             .then(clientService.findClientById(creditDto.clientId)
@@ -51,6 +53,7 @@ open class CreditService(
             .flatMap { sendCreditCheckEventKafka(it.toDto()).thenReturn(it.toDto()) }
     }
 
+    @Transactional
     open fun pay(paymentDto: PaymentDto): Mono<CreditDto> {
         return creditRepository
             .findCreditById(paymentDto.creditId)
@@ -61,7 +64,9 @@ open class CreditService(
                 creditRepository.save(credit)
             }
             .map { it.toDto() }
-            .doOnError { throw PaymentApproveException("Error while changing credit") }
+            .doOnNext {
+                throw PaymentApproveException("Error while changing credit")
+            }
     }
 
 

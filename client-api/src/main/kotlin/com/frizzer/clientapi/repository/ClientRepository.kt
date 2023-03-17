@@ -7,7 +7,5 @@ import reactor.core.publisher.Mono
 
 @Repository
 interface ClientRepository : ReactiveMongoRepository<Client, String> {
-    fun save(client: Client): Mono<Client>
-
     fun findClientById(id: String): Mono<Client>
 }

@@ -12,6 +12,6 @@ import reactor.core.publisher.Mono
 @Service
 interface CreditService {
     @RequestMapping(method = [RequestMethod.POST], value = ["/pay"])
-    fun paySagaCreditApi(payment: PaymentDto): Mono<CreditDto>
+    fun pay(payment: PaymentDto): Mono<CreditDto>
 
 }

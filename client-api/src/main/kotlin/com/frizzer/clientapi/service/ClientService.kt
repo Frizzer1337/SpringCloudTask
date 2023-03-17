@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono
 open class ClientService(
     private val clientRepository: ClientRepository,
 ) {
-
     @Transactional
     open fun save(clientDto: ClientDto): Mono<ClientDto> {
         return clientRepository
@@ -20,7 +19,10 @@ open class ClientService(
             .map { it.toDto() }
     }
 
-    fun findClientById(id: String): Mono<ClientDto> {
-        return clientRepository.findClientById(id).map { it.toDto() }
+    @Transactional
+    open fun findClientById(id: String): Mono<ClientDto> {
+        return clientRepository
+            .findClientById(id)
+            .map { it.toDto() }
     }
 }

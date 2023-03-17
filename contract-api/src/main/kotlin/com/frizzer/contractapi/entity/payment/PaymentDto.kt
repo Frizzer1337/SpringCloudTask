@@ -2,7 +2,7 @@ package com.frizzer.contractapi.entity.payment
 
 import org.bson.types.ObjectId
 
-class PaymentDto(
+data class PaymentDto(
     var id: String = ObjectId().toString(),
     var payment: Int,
     var creditId: String,

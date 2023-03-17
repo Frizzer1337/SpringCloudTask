@@ -9,3 +9,9 @@ kafka:
   bootstrap: localhost:9092
 server:
   port: 7000
+logging:
+  level:
+    org:
+      springframework:
+        transaction:
+          interceptor: TRACE

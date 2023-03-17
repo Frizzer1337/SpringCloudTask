@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
 
@@ -37,13 +38,16 @@ open class PaymentService(
             }
     }
 
+    @Transactional
     open fun pay(paymentDto: PaymentDto): Mono<PaymentDto> {
-        return paymentRepository.save(paymentDto.fromDto())
-            .then(creditService.paySagaCreditApi(paymentDto))
-            .doOnSuccess { paymentDto.status = PaymentStatus.APPROVED }
+        return paymentRepository
+            .save(paymentDto.fromDto())
+            .flatMap { creditService.pay(it.toDto()).thenReturn(paymentDto) }
+            .doOnSuccess { it.status = PaymentStatus.APPROVED }
             .doOnError { paymentDto.status = PaymentStatus.CANCELED }
-            .then(paymentRepository.save(paymentDto.fromDto()))
+            .flatMap { paymentRepository.save(it.fromDto()) }
             .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
     }
+
 
 }
