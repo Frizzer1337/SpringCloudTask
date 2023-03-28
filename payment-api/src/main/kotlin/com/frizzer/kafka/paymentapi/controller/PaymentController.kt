@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/payment")
 class PaymentController(private val paymentService: PaymentService) {
 
-    @PostMapping("/pay")
+    @PostMapping("/")
     fun pay(@RequestBody paymentDto: PaymentDto): ResponseEntity<Mono<PaymentDto>> {
         return ResponseEntity.ok(paymentService.pay(paymentDto))
     }

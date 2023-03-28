@@ -15,7 +15,7 @@ class CreditController(
     private val creditService: CreditService
 ) {
 
-    @PostMapping("/create")
+    @PostMapping("/")
     fun takeCredit(@RequestBody creditDto: CreditDto): ResponseEntity<Mono<CreditDto>> {
         return ResponseEntity.ok(creditService.save(creditDto))
     }

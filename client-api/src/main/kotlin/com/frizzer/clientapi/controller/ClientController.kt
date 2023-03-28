@@ -12,7 +12,7 @@ class ClientController(
     private val clientService: ClientService
 ) {
 
-    @PostMapping("/create")
+    @PostMapping("/")
     fun register(@RequestBody clientDto: ClientDto): ResponseEntity<Mono<ClientDto>> {
         return ResponseEntity.ok(clientService.save(clientDto))
     }
