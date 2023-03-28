@@ -2,6 +2,7 @@ package com.frizzer.kafka.paymentapi.service
 
 import com.frizzer.contractapi.entity.payment.*
 import com.frizzer.kafka.paymentapi.repository.PaymentRepository
+import feign.FeignException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -38,13 +39,17 @@ open class PaymentService(
             }
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = [FeignException::class])
     open fun pay(paymentDto: PaymentDto): Mono<PaymentDto> {
         return paymentRepository
             .save(paymentDto.fromDto())
             .flatMap { creditService.pay(it.toDto()).thenReturn(paymentDto) }
             .doOnSuccess { it.status = PaymentStatus.APPROVED }
-            .doOnError { paymentDto.status = PaymentStatus.CANCELED }
+            .onErrorResume { error ->
+                log.error("Payment error: {}", error.message)
+                paymentDto.status = PaymentStatus.CANCELED
+                Mono.just(paymentDto)
+            }
             .flatMap { paymentRepository.save(it.fromDto()) }
             .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
     }

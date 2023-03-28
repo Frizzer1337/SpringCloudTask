@@ -4,7 +4,6 @@ import com.frizzer.approveapi.repository.CreditRepository
 import com.frizzer.contractapi.entity.client.Client
 import com.frizzer.contractapi.entity.client.fromDto
 import com.frizzer.contractapi.entity.credit.*
-import com.frizzer.contractapi.entity.exception.PaymentApproveException
 import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -64,9 +63,6 @@ open class CreditService(
                 creditRepository.save(credit)
             }
             .map { it.toDto() }
-            .doOnNext {
-                throw PaymentApproveException("Error while changing credit")
-            }
     }
 
 
