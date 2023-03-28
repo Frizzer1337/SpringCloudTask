@@ -18,6 +18,9 @@ open class MongoReactiveConfiguration : AbstractReactiveMongoConfiguration() {
     @Value(value = "\${spring.data.mongodb.database}")
     private val databaseName: String = ""
 
+    @Value(value = "\${spring.data.mongodb.uri}")
+    private val mongoUri: String = ""
+
     @Bean
     open fun transactionManager(dbFactory: ReactiveMongoDatabaseFactory): ReactiveMongoTransactionManager {
         return ReactiveMongoTransactionManager(dbFactory)
@@ -28,8 +31,7 @@ open class MongoReactiveConfiguration : AbstractReactiveMongoConfiguration() {
     }
 
     override fun reactiveMongoClient(): MongoClient {
-
-        return MongoClients.create()
+        return MongoClients.create(mongoUri)
     }
 
 }

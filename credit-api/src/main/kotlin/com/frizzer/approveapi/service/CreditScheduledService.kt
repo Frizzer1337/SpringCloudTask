@@ -36,6 +36,9 @@ class CreditScheduledService(
     @Value(value = "\${credit.penalty.collector}")
     private val creditNeedCollectorMultiplier = 0.5
 
+    @Value(value = "\${kafka.topic.payed}")
+    private val creditPayedTopic = ""
+
     private val paymentDelayForPenalty = LocalDateTime.now().minusDays(amountOfDays).toString()
 
     private val emptyBalance = 0
@@ -44,8 +47,7 @@ class CreditScheduledService(
     fun changeStatusIfCreditPayed(): Disposable {
         return creditRepository
             .findCreditsByCreditBalanceEqualsAndCreditStatusEquals(
-                emptyBalance,
-                CreditStatus.APPROVED
+                emptyBalance, CreditStatus.APPROVED
             )
             .flatMap { credit ->
                 credit.creditStatus = CreditStatus.CREDIT_PAYED
@@ -88,7 +90,7 @@ class CreditScheduledService(
 
     private fun sendCreditPayedEvent(credit: Credit): Mono<SenderResult<Void>> {
         return kafkaCreditPayedTemplate.send(
-            "CREDIT_PAYED",
+            creditPayedTopic,
             CreditPayedEvent(credit.id, credit.creditStatus)
         )
             .doOnSuccess { result ->

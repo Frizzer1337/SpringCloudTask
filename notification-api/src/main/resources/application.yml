@@ -8,7 +8,7 @@ kafka:
     id: creditConsumers
   topic:
     check: CREDIT_CHECK
-    payed : CREDIT_PAYED
+    payed: CREDIT_PAYED
     payment: CREDIT_PAYMENT
 server:
   port: 7001

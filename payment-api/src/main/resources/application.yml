@@ -5,6 +5,7 @@ spring:
   data:
     mongodb:
       database: payment
+      uri: mongodb+srv://Frizzer:Giraf008@cluster0.mtbpt95.mongodb.net/?retryWrites=true&w=majority
 kafka:
   bootstrap: localhost:9092
   topic:

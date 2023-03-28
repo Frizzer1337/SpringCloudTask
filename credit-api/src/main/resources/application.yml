@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       database: credit
+      uri: mongodb+srv://Frizzer:Giraf008@cluster0.mtbpt95.mongodb.net/?retryWrites=true&w=majority
   kafka:
     consumer:
       auto-offset-reset: earliest
