@@ -1,9 +1,10 @@
 package com.frizzer.approveapi.service
 
 import com.frizzer.approveapi.repository.CreditRepository
-import com.frizzer.contractapi.entity.credit.Credit
+import com.frizzer.contractapi.entity.credit.CreditDto
 import com.frizzer.contractapi.entity.credit.CreditPayedEvent
 import com.frizzer.contractapi.entity.credit.CreditStatus
+import com.frizzer.contractapi.entity.credit.toDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -53,7 +54,7 @@ class CreditScheduledService(
                 credit.creditStatus = CreditStatus.CREDIT_PAYED
                 creditRepository.save(credit)
             }
-            .flatMap { credit -> sendCreditPayedEvent(credit) }
+            .flatMap { credit -> sendCreditPayedEvent(credit.toDto()) }
             .subscribe()
     }
 
@@ -88,15 +89,15 @@ class CreditScheduledService(
             .subscribe()
     }
 
-    private fun sendCreditPayedEvent(credit: Credit): Mono<SenderResult<Void>> {
+    private fun sendCreditPayedEvent(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaCreditPayedTemplate.send(
             creditPayedTopic,
-            CreditPayedEvent(credit.id, credit.creditStatus)
+            CreditPayedEvent(credit.id ?: "0", credit.creditStatus)
         )
             .doOnSuccess { result ->
                 log.info(
                     "Credit payed event sent {} offset: {}",
-                    CreditPayedEvent(credit.id, credit.creditStatus),
+                    CreditPayedEvent(credit.id ?: "0", credit.creditStatus),
                     result.recordMetadata().offset()
                 )
             }

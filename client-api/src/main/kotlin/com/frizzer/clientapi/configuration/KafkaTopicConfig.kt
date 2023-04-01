@@ -1,4 +1,4 @@
-package com.frizzer.clientapi.configuration.kafka
+package com.frizzer.clientapi.configuration
 
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.springframework.beans.factory.annotation.Value

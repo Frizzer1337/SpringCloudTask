@@ -6,27 +6,25 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <groupId>org.springframework.boot</groupId>
-      </plugin>
-      <plugin>
         <artifactId>kotlin-maven-plugin</artifactId>
         <configuration>
-          <args>
-            <arg>-Xjsr305=strict</arg>
-          </args>
           <compilerPlugins>
-            <plugin>spring</plugin>
+            <plugin>no-arg</plugin>
           </compilerPlugins>
+          <pluginOptions>
+            <option>no-arg:annotation=javax.persistence.Entity</option>
+          </pluginOptions>
         </configuration>
         <dependencies>
           <dependency>
-            <artifactId>kotlin-maven-allopen</artifactId>
+            <artifactId>kotlin-maven-noarg</artifactId>
             <groupId>org.jetbrains.kotlin</groupId>
             <version>${kotlin.version}</version>
           </dependency>
         </dependencies>
         <groupId>org.jetbrains.kotlin</groupId>
+
+        <version>${kotlin.version}</version>
       </plugin>
     </plugins>
     <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
@@ -44,6 +42,16 @@
       <version>2.14.2</version>
     </dependency>
     <dependency>
+      <artifactId>spring-data-commons</artifactId>
+      <groupId>org.springframework.data</groupId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <artifactId>kotlin-noarg</artifactId>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <version>${kotlin.version}</version>
+    </dependency>
+    <dependency>
       <artifactId>kotlin-reflect</artifactId>
       <groupId>org.jetbrains.kotlin</groupId>
     </dependency>
@@ -57,13 +65,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <artifactId>javax.persistence-api</artifactId>
+      <groupId>javax.persistence</groupId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
       <artifactId>mapstruct</artifactId>
       <groupId>org.mapstruct</groupId>
       <version>1.5.3.Final</version>
-    </dependency>
-    <dependency>
-      <artifactId>bson</artifactId>
-      <groupId>org.mongodb</groupId>
     </dependency>
     <dependency>
       <artifactId>jackson-annotations</artifactId>

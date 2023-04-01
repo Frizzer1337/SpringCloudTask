@@ -29,11 +29,14 @@ open class PaymentService(
     private fun sendPaymentEvent(
         payment: PaymentDto
     ): Mono<SenderResult<Void>> {
-        return kafkaTemplate.send(creditPaymentTopic, PaymentEvent(payment.id, payment.status))
+        return kafkaTemplate.send(
+            creditPaymentTopic,
+            PaymentEvent(payment.id ?: "0", payment.status)
+        )
             .doOnSuccess { result ->
                 log.info(
                     "Credit payment event sent {} offset: {}",
-                    PaymentEvent(payment.id, payment.status),
+                    PaymentEvent(payment.id ?: "0", payment.status),
                     result.recordMetadata()
                 )
             }
@@ -41,16 +44,13 @@ open class PaymentService(
 
     @Transactional(noRollbackFor = [FeignException::class])
     open fun pay(paymentDto: PaymentDto): Mono<PaymentDto> {
-        return paymentRepository
-            .save(paymentDto.fromDto())
-            .flatMap { creditService.pay(it.toDto()).thenReturn(paymentDto) }
-            .doOnSuccess { it.status = PaymentStatus.APPROVED }
-            .onErrorResume { error ->
+        return creditService.pay(paymentDto)
+            .doOnSuccess { paymentDto.status = PaymentStatus.APPROVED }
+            .doOnError { error ->
                 log.error("Payment error: {}", error.message)
                 paymentDto.status = PaymentStatus.CANCELED
-                Mono.just(paymentDto)
             }
-            .flatMap { paymentRepository.save(it.fromDto()) }
+            .flatMap { paymentRepository.save(paymentDto.fromDto()) }
             .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
     }
 

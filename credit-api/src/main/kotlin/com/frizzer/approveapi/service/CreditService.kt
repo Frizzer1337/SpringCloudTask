@@ -8,11 +8,14 @@ import com.frizzer.contractapi.entity.payment.PaymentDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
+import reactor.kotlin.core.publisher.toMono
 import java.time.LocalDateTime
 
 @Service
@@ -46,20 +49,31 @@ open class CreditService(
 
     @Transactional
     open fun save(creditDto: CreditDto): Mono<CreditDto> {
-        return creditRepository.save(creditDto.fromDto())
-            .then(clientService.findClientById(creditDto.clientId)
-                .flatMap { approve(creditDto, it.fromDto()) })
+        return clientService.findClientById(creditDto.clientId)
+            .switchIfEmpty(
+                ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found").toMono()
+            )
+            .flatMap { approve(creditDto.fromDto(), it.fromDto()) }
             .flatMap { sendCreditCheckEventKafka(it.toDto()).thenReturn(it.toDto()) }
     }
 
     @Transactional
     open fun pay(paymentDto: PaymentDto): Mono<CreditDto> {
+        println(paymentDto)
         return creditRepository
-            .findCreditById(paymentDto.creditId)
+            .findById(paymentDto.creditId)
+            .doOnNext { println("credit before map $it") }
+            .switchIfEmpty(
+                ResponseStatusException(HttpStatus.NOT_FOUND, "Credit not found").toMono()
+            )
             .flatMap { credit ->
                 credit.creditBalance = credit.creditBalance - paymentDto.payment
                 credit.penalty = credit.penalty - paymentDto.payment
                 credit.lastPaymentDate = LocalDateTime.now().toString()
+                credit.toMono()
+            }
+            .doOnNext { println("credit after map $it") }
+            .flatMap { credit ->
                 creditRepository.save(credit)
             }
             .map { it.toDto() }
@@ -68,18 +82,18 @@ open class CreditService(
 
     private fun sendCreditCheckEventKafka(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaTemplate.send(
-            creditCheckTopic, CreditCheckEvent(credit.id, credit.creditStatus)
+            creditCheckTopic, CreditCheckEvent(credit.id ?: "0", credit.creditStatus)
         ).doOnSuccess { result ->
             log.info(
                 "sent {} offset: {}",
-                CreditCheckEvent(credit.id, credit.creditStatus),
+                CreditCheckEvent(credit.id ?: "0", credit.creditStatus),
                 result.recordMetadata().offset()
             )
         }
     }
 
     private fun approve(
-        credit: CreditDto,
+        credit: Credit,
         client: Client,
     ): Mono<Credit> {
         val creditRate: Double =
@@ -90,19 +104,16 @@ open class CreditService(
 
     private fun approveByCreditRate(
         creditRate: Double,
-        credit: CreditDto,
+        credit: Credit,
     ): Mono<Credit> {
         credit.creditStatus = getCreditStatus(creditRate)
-        return creditRepository.save(credit.fromDto())
+        return creditRepository.save(credit)
     }
 
-    private fun getCreditStatus(
-        creditRate: Double
-    ) = if (creditRate > approveRate) {
-        CreditStatus.APPROVED
-    } else if (creditRate > humanApproveRate) {
-        CreditStatus.NEED_HUMAN_APPROVE
-    } else {
-        CreditStatus.NOT_APPROVED
-    }
+    private fun getCreditStatus(creditRate: Double) =
+        when {
+            creditRate > approveRate -> CreditStatus.APPROVED
+            creditRate > humanApproveRate -> CreditStatus.NEED_HUMAN_APPROVE
+            else -> CreditStatus.NOT_APPROVED
+        }
 }

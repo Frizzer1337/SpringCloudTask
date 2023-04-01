@@ -1,11 +1,11 @@
 spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/db?useSSL=false
+    username: user
+    password: user
   kafka:
     consumer:
       auto-offset-reset: earliest
-  data:
-    mongodb:
-      database: payment
-      uri: mongodb+srv://Frizzer:Giraf008@cluster0.mtbpt95.mongodb.net/?retryWrites=true&w=majority
 kafka:
   bootstrap: localhost:9092
   topic:

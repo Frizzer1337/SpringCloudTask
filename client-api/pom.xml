@@ -69,13 +69,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+      <artifactId>spring-boot-starter-data-r2dbc</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>3.0.5</version>
     </dependency>
     <dependency>
-      <artifactId>reactor-core</artifactId>
-      <groupId>io.projectreactor</groupId>
-      <version>3.4.23</version>
+      <artifactId>r2dbc-mysql</artifactId>
+      <groupId>io.asyncer</groupId>
+      <version>0.9.1</version>
     </dependency>
     <dependency>
       <artifactId>contract-api</artifactId>
