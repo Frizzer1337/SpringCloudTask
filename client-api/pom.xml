@@ -48,11 +48,6 @@
       <groupId>org.springframework.kafka</groupId>
     </dependency>
     <dependency>
-      <artifactId>log4j-core</artifactId>
-      <groupId>org.apache.logging.log4j</groupId>
-      <version>2.18.0</version>
-    </dependency>
-    <dependency>
       <artifactId>spring-boot-devtools</artifactId>
       <groupId>org.springframework.boot</groupId>
       <optional>true</optional>
@@ -77,6 +72,20 @@
       <artifactId>r2dbc-mysql</artifactId>
       <groupId>io.asyncer</groupId>
       <version>0.9.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+     <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+      <version>3.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-gateway</artifactId>
+      <version>3.1.2</version>
     </dependency>
     <dependency>
       <artifactId>contract-api</artifactId>

@@ -6,13 +6,20 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: earliest
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: client-api
+        instance-id: client-api
 kafka:
   bootstrap: localhost:9092
-server:
-  port: 7000
 logging:
   level:
     org:
       springframework:
         transaction:
           interceptor: TRACE
+server:
+  port: 7000

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import reactivefeign.spring.config.ReactiveFeignClient
 import reactor.core.publisher.Mono
 
-@ReactiveFeignClient(value = "client-api", url = "http://localhost:7000/client")
+@ReactiveFeignClient(value = "client-api", url = "http://localhost:8000/client")
 @Service
 interface ClientService {
     @RequestMapping(method = [RequestMethod.GET], value = ["/{id}"])

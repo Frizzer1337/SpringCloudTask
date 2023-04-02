@@ -21,4 +21,5 @@ class ClientController(
     fun findClientById(@PathVariable("id") id: String): ResponseEntity<Mono<ClientDto>> {
         return ResponseEntity.ok(clientService.findClientById(id))
     }
+
 }

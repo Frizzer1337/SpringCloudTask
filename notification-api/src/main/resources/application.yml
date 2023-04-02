@@ -2,6 +2,13 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: earliest
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: notification-api
+        instance-id: notification-api
 kafka:
   bootstrap: localhost:9092
   group:
