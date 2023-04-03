@@ -3,6 +3,6 @@ spring:
     config:
       server:
         git:
-          uri: <git-repo-url>
+          uri: https://github.com/Frizzer1337/SpringCloudTask/tree/dev/config-service/configs/
 server:
   port: 8888
