@@ -1,16 +1,23 @@
 spring:
+  application:
+    name: notification-api
+  config:
+    import:
+      - "optional:configserver:http://localhost:8888/"
   kafka:
     consumer:
       auto-offset-reset: earliest
   cloud:
+    config:
+      enabled: false
     consul:
-      host: localhost
+      host: consul-server1
       port: 8500
       discovery:
         service-name: notification-api
         instance-id: notification-api
 kafka:
-  bootstrap: localhost:9092
+  bootstrap: broker:9092
   group:
     id: creditConsumers
   topic:
@@ -18,5 +25,4 @@ kafka:
     payed: CREDIT_PAYED
     payment: CREDIT_PAYMENT
 server:
-  port: 7001
-
+  port: 7002

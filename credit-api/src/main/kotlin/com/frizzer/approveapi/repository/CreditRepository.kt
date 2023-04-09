@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 
 @Repository
-interface CreditRepository : R2dbcRepository<Credit, String> {
+interface CreditRepository : R2dbcRepository<Credit, Int> {
     fun findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
         lastPaymentDate: String,
         creditStatus: CreditStatus

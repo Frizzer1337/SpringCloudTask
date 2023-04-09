@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import reactivefeign.spring.config.ReactiveFeignClient
 import reactor.core.publisher.Mono
 
-@ReactiveFeignClient(value = "credit-api", url = "http://localhost:8000/credit")
+@ReactiveFeignClient(value = "credit-api", url = "http://api-gateway:8000/credit")
 @Service
 interface CreditService {
     @RequestMapping(method = [RequestMethod.POST], value = ["/pay"])

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 
 @Repository
-interface ClientRepository : R2dbcRepository<Client, String> {
-    fun findClientById(id: String): Mono<Client>
+interface ClientRepository : R2dbcRepository<Client, Int> {
+    fun findClientById(id: Int): Mono<Client>
 }

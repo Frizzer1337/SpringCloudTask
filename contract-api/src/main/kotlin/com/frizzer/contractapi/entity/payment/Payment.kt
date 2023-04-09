@@ -8,9 +8,9 @@ import javax.persistence.Table
 data class Payment(
     @Id
     @org.springframework.data.annotation.Id
-    var id: String?,
+    var id: Int,
     var payment: Int,
-    var creditId: String,
+    var creditId: Int,
     var status: PaymentStatus
 ) {
     override fun equals(other: Any?): Boolean {

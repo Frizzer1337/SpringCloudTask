@@ -2,9 +2,9 @@ package com.frizzer.contractapi.entity.payment
 
 
 data class PaymentDto(
-    var id: String?,
+    var id: Int,
     var payment: Int,
-    var creditId: String,
+    var creditId: Int,
     var status: PaymentStatus = PaymentStatus.PENDING
 )
 

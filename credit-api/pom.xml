@@ -8,7 +8,7 @@
       <plugin>
         <artifactId>kotlin-maven-plugin</artifactId>
         <configuration>
-          <jvmTarget>1.8</jvmTarget>
+          <jvmTarget>17</jvmTarget>
         </configuration>
         <executions>
           <execution>
@@ -36,7 +36,7 @@
     <dependency>
       <artifactId>reactor-kotlin-extensions</artifactId>
       <groupId>io.projectreactor.kotlin</groupId>
-      <version>1.2.2</version>
+      <version>${kotlin-reactor.version}</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-webflux</artifactId>
@@ -66,7 +66,7 @@
       <artifactId>feign-reactor-spring-cloud-starter</artifactId>
       <groupId>com.playtika.reactivefeign</groupId>
       <type>pom</type>
-      <version>3.1.2</version>
+      <version>${reactive-feign.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -75,32 +75,33 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-      <version>3.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-config</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-gateway</artifactId>
-      <version>3.1.2</version>
     </dependency>
     <dependency>
       <artifactId>feign-slf4j</artifactId>
       <groupId>io.github.openfeign</groupId>
-      <version>9.3.1</version>
+      <version>${openfeign.version}</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-data-r2dbc</artifactId>
       <groupId>org.springframework.boot</groupId>
-      <version>3.0.5</version>
     </dependency>
     <dependency>
       <artifactId>r2dbc-mysql</artifactId>
       <groupId>io.asyncer</groupId>
-      <version>0.9.1</version>
+      <version>${asyncer.version}</version>
     </dependency>
     <dependency>
       <artifactId>reactor-core</artifactId>
       <groupId>io.projectreactor</groupId>
-      <version>3.4.23</version>
+      <version>${reactor.version}</version>
     </dependency>
     <dependency>
       <artifactId>contract-api</artifactId>
@@ -151,7 +152,12 @@
     <version>2.7.4</version>
   </parent>
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
+    <openfeign.version>9.3.1</openfeign.version>
+    <asyncer.version>0.9.1</asyncer.version>
+    <reactor.version>3.4.23</reactor.version>
+    <reactive-feign.version>3.1.2</reactive-feign.version>
+    <kotlin-reactor.version>1.2.2</kotlin-reactor.version>
     <kotlin.version>1.8.20-RC</kotlin.version>
   </properties>
   <version>0.0.1-SNAPSHOT</version>

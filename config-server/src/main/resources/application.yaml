@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Frizzer1337/SpringCloudConfig.git
+          search-paths: credit-api, payment-api, client-api, notification-api, gateway-api
+    consul:
+      host: consul-server1
+      port: 8500
+      discovery:
+        service-name: config-server
+        instance-id: config-server
+server:
+  port: 8888

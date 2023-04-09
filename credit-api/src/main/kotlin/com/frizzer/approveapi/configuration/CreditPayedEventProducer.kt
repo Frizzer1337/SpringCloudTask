@@ -13,7 +13,7 @@ import reactor.kafka.sender.SenderOptions
 @Configuration
 open class CreditPayedEventProducer {
     @Bean
-    open fun reactiveCreditPayedEventKafkaTemplate(@Value(value = "\${kafka.bootstrap}") bootstrapAddress: String? = null): ReactiveKafkaProducerTemplate<String, CreditPayedEvent> {
+    open fun reactiveCreditPayedEventKafkaTemplate(@Value(value = "\${kafka.bootstrap}") bootstrapAddress: String): ReactiveKafkaProducerTemplate<String, CreditPayedEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java

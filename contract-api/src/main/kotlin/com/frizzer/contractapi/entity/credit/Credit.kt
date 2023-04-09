@@ -10,11 +10,11 @@ import javax.persistence.Table
 data class Credit(
     @Id
     @org.springframework.data.annotation.Id
-    var id: String?,
+    var id: Int,
     var lastPaymentDate: String,
     var creditBalance: Int,
     var penalty: Int,
-    var clientId: String,
+    var clientId: Int,
     @Enumerated(EnumType.STRING)
     var creditStatus: CreditStatus
 ) {
@@ -38,7 +38,7 @@ data class Credit(
 }
 
 fun Credit.toDto() = CreditDto(
-    id = id + "",
+    id = id,
     lastPaymentDate = lastPaymentDate,
     creditBalance = creditBalance,
     penalty = penalty,

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import reactivefeign.spring.config.ReactiveFeignClient
 import reactor.core.publisher.Mono
 
-@ReactiveFeignClient(value = "client-api", url = "http://localhost:8000/client")
+@ReactiveFeignClient(value = "client-api", url = "http://api-gateway:8000/client")
 @Service
 interface ClientService {
     @RequestMapping(method = [RequestMethod.GET], value = ["/{id}"])
-    fun findClientById(@PathVariable("id") clientId: String): Mono<ClientDto>
+    fun findClientById(@PathVariable("id") clientId: Int): Mono<ClientDto>
 }

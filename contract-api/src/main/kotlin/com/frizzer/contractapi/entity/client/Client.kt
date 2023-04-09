@@ -8,7 +8,7 @@ import javax.persistence.Table
 data class Client(
     @Id
     @org.springframework.data.annotation.Id
-    var id: String?,
+    var id: Int,
     var name: String,
     var surname: String,
     var phone: String,

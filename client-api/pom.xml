@@ -8,7 +8,7 @@
       <plugin>
         <artifactId>kotlin-maven-plugin</artifactId>
         <configuration>
-          <jvmTarget>1.8</jvmTarget>
+          <jvmTarget>17</jvmTarget>
         </configuration>
         <executions>
           <execution>
@@ -37,7 +37,7 @@
     <dependency>
       <artifactId>reactor-kafka</artifactId>
       <groupId>io.projectreactor.kafka</groupId>
-      <version>1.3.13</version>
+      <version>${reactor-kafka.version}</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-webflux</artifactId>
@@ -66,12 +66,11 @@
     <dependency>
       <artifactId>spring-boot-starter-data-r2dbc</artifactId>
       <groupId>org.springframework.boot</groupId>
-      <version>3.0.5</version>
     </dependency>
     <dependency>
       <artifactId>r2dbc-mysql</artifactId>
       <groupId>io.asyncer</groupId>
-      <version>0.9.1</version>
+      <version>${asyncer.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -80,17 +79,14 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-      <version>3.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
-      <version>3.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-gateway</artifactId>
-      <version>3.1.2</version>
     </dependency>
     <dependency>
       <artifactId>contract-api</artifactId>
@@ -110,8 +106,17 @@
       <version>${kotlin.version}</version>
     </dependency>
   </dependencies>
-
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>2021.0.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <description>client-api</description>
   <groupId>com.frizzer.kafka</groupId>
   <modelVersion>4.0.0</modelVersion>
@@ -123,8 +128,14 @@
     <version>2.7.4</version>
   </parent>
   <properties>
-    <java.version>11</java.version>
+    <openfeign.version>9.3.1</openfeign.version>
+    <asyncer.version>0.9.1</asyncer.version>
+    <reactor.version>3.4.23</reactor.version>
+    <reactor-kafka.version>1.3.13</reactor-kafka.version>
+    <reactive-feign.version>3.1.2</reactive-feign.version>
+    <kotlin-reactor.version>1.2.2</kotlin-reactor.version>
+    <java.version>17</java.version>
     <kotlin.version>1.8.20-RC</kotlin.version>
   </properties>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>release</version>
 </project>

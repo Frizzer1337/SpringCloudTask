@@ -31,12 +31,12 @@ open class PaymentService(
     ): Mono<SenderResult<Void>> {
         return kafkaTemplate.send(
             creditPaymentTopic,
-            PaymentEvent(payment.id ?: "0", payment.status)
+            PaymentEvent(payment.id, payment.status)
         )
             .doOnSuccess { result ->
                 log.info(
                     "Credit payment event sent {} offset: {}",
-                    PaymentEvent(payment.id ?: "0", payment.status),
+                    PaymentEvent(payment.id, payment.status),
                     result.recordMetadata()
                 )
             }

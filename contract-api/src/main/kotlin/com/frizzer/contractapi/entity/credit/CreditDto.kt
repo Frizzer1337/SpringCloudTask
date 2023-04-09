@@ -3,11 +3,11 @@ package com.frizzer.contractapi.entity.credit
 import java.time.LocalDateTime
 
 data class CreditDto(
-    val id: String?,
+    val id: Int,
     val lastPaymentDate: String = LocalDateTime.now().toString(),
     val creditBalance: Int,
     val penalty: Int,
-    val clientId: String,
+    val clientId: Int,
     var creditStatus: CreditStatus = CreditStatus.CREATED
 )
 

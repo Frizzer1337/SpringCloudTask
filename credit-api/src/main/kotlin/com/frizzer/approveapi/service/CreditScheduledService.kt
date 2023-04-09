@@ -92,12 +92,12 @@ class CreditScheduledService(
     private fun sendCreditPayedEvent(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaCreditPayedTemplate.send(
             creditPayedTopic,
-            CreditPayedEvent(credit.id ?: "0", credit.creditStatus)
+            CreditPayedEvent(credit.id, credit.creditStatus)
         )
             .doOnSuccess { result ->
                 log.info(
                     "Credit payed event sent {} offset: {}",
-                    CreditPayedEvent(credit.id ?: "0", credit.creditStatus),
+                    CreditPayedEvent(credit.id , credit.creditStatus),
                     result.recordMetadata().offset()
                 )
             }

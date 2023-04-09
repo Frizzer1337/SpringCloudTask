@@ -59,10 +59,8 @@ open class CreditService(
 
     @Transactional
     open fun pay(paymentDto: PaymentDto): Mono<CreditDto> {
-        println(paymentDto)
         return creditRepository
             .findById(paymentDto.creditId)
-            .doOnNext { println("credit before map $it") }
             .switchIfEmpty(
                 ResponseStatusException(HttpStatus.NOT_FOUND, "Credit not found").toMono()
             )
@@ -72,7 +70,6 @@ open class CreditService(
                 credit.lastPaymentDate = LocalDateTime.now().toString()
                 credit.toMono()
             }
-            .doOnNext { println("credit after map $it") }
             .flatMap { credit ->
                 creditRepository.save(credit)
             }
@@ -82,11 +79,11 @@ open class CreditService(
 
     private fun sendCreditCheckEventKafka(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaTemplate.send(
-            creditCheckTopic, CreditCheckEvent(credit.id ?: "0", credit.creditStatus)
+            creditCheckTopic, CreditCheckEvent(credit.id, credit.creditStatus)
         ).doOnSuccess { result ->
             log.info(
                 "sent {} offset: {}",
-                CreditCheckEvent(credit.id ?: "0", credit.creditStatus),
+                CreditCheckEvent(credit.id, credit.creditStatus),
                 result.recordMetadata().offset()
             )
         }
