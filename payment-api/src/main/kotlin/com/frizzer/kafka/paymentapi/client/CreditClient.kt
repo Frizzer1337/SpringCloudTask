@@ -1,4 +1,4 @@
-package com.frizzer.kafka.paymentapi.service
+package com.frizzer.kafka.paymentapi.client
 
 import com.frizzer.contractapi.entity.credit.CreditDto
 import com.frizzer.contractapi.entity.payment.PaymentDto
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import reactivefeign.spring.config.ReactiveFeignClient
 import reactor.core.publisher.Mono
 
-@ReactiveFeignClient(value = "credit-api", url = "http://api-gateway:8000/credit")
+@ReactiveFeignClient(name = "credit-api", url = "\${reactive-feign.client.credit-api.url}")
 @Service
-interface CreditService {
+interface CreditClient {
     @RequestMapping(method = [RequestMethod.POST], value = ["/pay"])
     fun pay(payment: PaymentDto): Mono<CreditDto>
 

@@ -1,6 +1,7 @@
 package com.frizzer.kafka.paymentapi.service
 
 import com.frizzer.contractapi.entity.payment.*
+import com.frizzer.kafka.paymentapi.client.CreditClient
 import com.frizzer.kafka.paymentapi.repository.PaymentRepository
 import feign.FeignException
 import org.slf4j.Logger
@@ -15,7 +16,7 @@ import reactor.kafka.sender.SenderResult
 
 @Service
 open class PaymentService(
-    private val creditService: CreditService,
+    private val creditClient: CreditClient,
     private val paymentRepository: PaymentRepository,
     private val kafkaTemplate: ReactiveKafkaProducerTemplate<String, PaymentEvent>,
 ) {
@@ -25,6 +26,18 @@ open class PaymentService(
 
     @Value(value = "\${kafka.topic.payment}")
     private val creditPaymentTopic: String = ""
+
+    @Transactional(noRollbackFor = [FeignException::class])
+    open fun pay(paymentDto: PaymentDto): Mono<PaymentDto> {
+        return creditClient.pay(paymentDto)
+            .doOnSuccess { paymentDto.status = PaymentStatus.APPROVED }
+            .doOnError { error ->
+                log.error("Payment error: {}", error.message)
+                paymentDto.status = PaymentStatus.CANCELED
+            }
+            .flatMap { paymentRepository.save(paymentDto.fromDto()) }
+            .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
+    }
 
     private fun sendPaymentEvent(
         payment: PaymentDto
@@ -40,18 +53,6 @@ open class PaymentService(
                     result.recordMetadata()
                 )
             }
-    }
-
-    @Transactional(noRollbackFor = [FeignException::class])
-    open fun pay(paymentDto: PaymentDto): Mono<PaymentDto> {
-        return creditService.pay(paymentDto)
-            .doOnSuccess { paymentDto.status = PaymentStatus.APPROVED }
-            .doOnError { error ->
-                log.error("Payment error: {}", error.message)
-                paymentDto.status = PaymentStatus.CANCELED
-            }
-            .flatMap { paymentRepository.save(paymentDto.fromDto()) }
-            .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
     }
 
 

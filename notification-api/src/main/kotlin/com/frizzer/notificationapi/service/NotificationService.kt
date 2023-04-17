@@ -6,6 +6,7 @@ import com.frizzer.contractapi.entity.payment.PaymentEvent
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationStartedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate
@@ -16,13 +17,13 @@ import reactor.core.publisher.Flux
 class NotificationService(
     private val kafkaCreditCheckReceiver: ReactiveKafkaConsumerTemplate<String, CreditCheckEvent>,
     private val kafkaCreditPayedReceiver: ReactiveKafkaConsumerTemplate<String, CreditPayedEvent>,
-    private val kafkaPaymentReceiver: ReactiveKafkaConsumerTemplate<String, PaymentEvent>
-
+    private val kafkaPaymentReceiver: ReactiveKafkaConsumerTemplate<String, PaymentEvent>,
+    @Value("\${logger.default}")
+    private val logName: String = ""
 ) {
 
-    companion object {
-        var log: Logger = LoggerFactory.getLogger(NotificationService::class.java)
-    }
+
+    var log: Logger = LoggerFactory.getLogger(logName)
 
     @EventListener(ApplicationStartedEvent::class)
     fun kafkaReceivingCreditCheck(): Flux<ConsumerRecord<String, CreditCheckEvent>> {

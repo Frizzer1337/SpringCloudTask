@@ -1,5 +1,6 @@
 package com.frizzer.approveapi.service
 
+import com.frizzer.approveapi.client.ClientFeignClient
 import com.frizzer.approveapi.repository.CreditRepository
 import com.frizzer.contractapi.entity.client.Client
 import com.frizzer.contractapi.entity.client.fromDto
@@ -21,13 +22,9 @@ import java.time.LocalDateTime
 @Service
 open class CreditService(
     private val creditRepository: CreditRepository,
-    private val clientService: ClientService,
+    private val feignClient: ClientFeignClient,
     private val kafkaTemplate: ReactiveKafkaProducerTemplate<String, CreditCheckEvent>
 ) {
-
-    companion object {
-        private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
-    }
 
     @Value(value = "\${credit.modifier.salary}")
     private val salaryModifier: Double = 1.0
@@ -49,9 +46,9 @@ open class CreditService(
 
     @Transactional
     open fun save(creditDto: CreditDto): Mono<CreditDto> {
-        return clientService.findClientById(creditDto.clientId)
+        return feignClient.findClientById(creditDto.clientId)
             .switchIfEmpty(
-                ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found").toMono()
+                ResponseStatusException(HttpStatus.NOT_FOUND, "ClientFeignClient not found").toMono()
             )
             .flatMap { approve(creditDto.fromDto(), it.fromDto()) }
             .flatMap { sendCreditCheckEventKafka(it.toDto()).thenReturn(it.toDto()) }
@@ -113,4 +110,8 @@ open class CreditService(
             creditRate > humanApproveRate -> CreditStatus.NEED_HUMAN_APPROVE
             else -> CreditStatus.NOT_APPROVED
         }
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)
+    }
 }

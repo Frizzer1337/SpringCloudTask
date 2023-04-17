@@ -18,7 +18,6 @@ open class KafkaCreditCheckProducerConfig {
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
-        println(bootstrapAddress)
         return ReactiveKafkaProducerTemplate<String, CreditCheckEvent>(SenderOptions.create(props))
     }
 }

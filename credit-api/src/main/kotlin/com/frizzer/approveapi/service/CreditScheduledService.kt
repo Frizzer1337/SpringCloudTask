@@ -89,6 +89,18 @@ class CreditScheduledService(
             .subscribe()
     }
 
+    @Scheduled(fixedDelay = 10000)
+    fun sendWarnForBigPenalty(): Disposable {
+        return creditRepository
+            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
+                paymentDelayForPenalty,
+                CreditStatus.APPROVED
+            )
+            .filter { credit -> credit.penalty > credit.creditBalance * bigPenaltyMultiplier }
+            .doOnNext { x -> log.warn("Credit have big penalty {}", x) }
+            .subscribe()
+    }
+
     private fun sendCreditPayedEvent(credit: CreditDto): Mono<SenderResult<Void>> {
         return kafkaCreditPayedTemplate.send(
             creditPayedTopic,
@@ -101,18 +113,6 @@ class CreditScheduledService(
                     result.recordMetadata().offset()
                 )
             }
-    }
-
-    @Scheduled(fixedDelay = 10000)
-    fun sendWarnForBigPenalty(): Disposable {
-        return creditRepository
-            .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
-                paymentDelayForPenalty,
-                CreditStatus.APPROVED
-            )
-            .filter { credit -> credit.penalty > credit.creditBalance * bigPenaltyMultiplier }
-            .doOnNext { x -> log.warn("Credit have big penalty {}", x) }
-            .subscribe()
     }
 
 }

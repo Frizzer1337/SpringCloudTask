@@ -1,4 +1,4 @@
-package com.frizzer.approveapi.service
+package com.frizzer.approveapi.client
 
 import com.frizzer.contractapi.entity.client.ClientDto
 import org.springframework.stereotype.Service
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import reactivefeign.spring.config.ReactiveFeignClient
 import reactor.core.publisher.Mono
 
-@ReactiveFeignClient(value = "client-api", url = "http://api-gateway:8000/client")
+@ReactiveFeignClient(name = "client-api", url = "\${reactive-feign.client.client-api.url}")
 @Service
-interface ClientService {
+interface ClientFeignClient {
     @RequestMapping(method = [RequestMethod.GET], value = ["/{id}"])
     fun findClientById(@PathVariable("id") clientId: Int): Mono<ClientDto>
 }
