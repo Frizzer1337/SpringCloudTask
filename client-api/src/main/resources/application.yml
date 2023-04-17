@@ -5,7 +5,7 @@ spring:
     import:
       - "optional:configserver:http://config-server:8888/"
   r2dbc:
-    url: r2dbc:mysql://db:3306/db?useSSL=false
+    url: r2dbc:mysql://db.default.svc.cluster.local:3306/db?useSSL=false
     username: user
     password: user
   kafka:
@@ -20,8 +20,9 @@ spring:
       discovery:
         service-name: client-api
         instance-id: client-api
-kafka:
-  bootstrap: broker:9092
+      enabled: false
+logger:
+  default: com.frizzer.logger
 logging:
   level:
     org:

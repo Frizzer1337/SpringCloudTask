@@ -97,6 +97,11 @@
       <scope>test</scope>
       <version>${kotlin.version}</version>
     </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${logback-net.version}</version>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -120,6 +125,7 @@
     <version>2.7.4</version>
   </parent>
   <properties>
+    <logback-net.version>6.6</logback-net.version>
     <openfeign.version>9.3.1</openfeign.version>
     <asyncer.version>0.9.1</asyncer.version>
     <reactor.version>3.4.23</reactor.version>

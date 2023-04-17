@@ -34,16 +34,6 @@
   </build>
   <dependencies>
     <dependency>
-      <artifactId>reactor-kotlin-extensions</artifactId>
-      <groupId>io.projectreactor.kotlin</groupId>
-      <version>${kotlin-reactor.version}</version>
-    </dependency>
-    <dependency>
-      <artifactId>reactor-kafka</artifactId>
-      <groupId>io.projectreactor.kafka</groupId>
-      <version>${reactor-kafka.version}</version>
-    </dependency>
-    <dependency>
       <artifactId>spring-boot-starter-webflux</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
@@ -73,12 +63,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <artifactId>feign-reactor-spring-cloud-starter</artifactId>
-      <groupId>com.playtika.reactivefeign</groupId>
-      <type>pom</type>
-      <version>${reactive-feign.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
@@ -95,23 +79,39 @@
       <artifactId>spring-cloud-starter-gateway</artifactId>
     </dependency>
     <dependency>
-      <artifactId>feign-slf4j</artifactId>
-      <groupId>io.github.openfeign</groupId>
-      <version>${openfeign.version}</version>
-    </dependency>
-    <dependency>
       <artifactId>spring-boot-starter-data-r2dbc</artifactId>
       <groupId>org.springframework.boot</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>r2dbc-mysql</artifactId>
-      <groupId>io.asyncer</groupId>
-      <version>${asyncer.version}</version>
     </dependency>
     <dependency>
       <artifactId>reactor-core</artifactId>
       <groupId>io.projectreactor</groupId>
       <version>${reactor.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>reactor-kotlin-extensions</artifactId>
+      <groupId>io.projectreactor.kotlin</groupId>
+      <version>${kotlin-reactor.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>reactor-kafka</artifactId>
+      <groupId>io.projectreactor.kafka</groupId>
+      <version>${reactor-kafka.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>feign-reactor-spring-cloud-starter</artifactId>
+      <groupId>com.playtika.reactivefeign</groupId>
+      <type>pom</type>
+      <version>${reactive-feign.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>feign-slf4j</artifactId>
+      <groupId>io.github.openfeign</groupId>
+      <version>${openfeign.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>r2dbc-mysql</artifactId>
+      <groupId>io.asyncer</groupId>
+      <version>${asyncer.version}</version>
     </dependency>
     <dependency>
       <artifactId>contract-api</artifactId>
@@ -123,6 +123,11 @@
       <artifactId>kotlin-stdlib-jdk8</artifactId>
       <groupId>org.jetbrains.kotlin</groupId>
       <version>${kotlin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${logback-net.version}</version>
     </dependency>
     <dependency>
       <artifactId>kotlin-test</artifactId>
@@ -158,6 +163,7 @@
     <version>2.7.4</version>
   </parent>
   <properties>
+    <logback-net.version>6.6</logback-net.version>
     <openfeign.version>9.3.1</openfeign.version>
     <asyncer.version>0.9.1</asyncer.version>
     <reactor.version>3.4.23</reactor.version>

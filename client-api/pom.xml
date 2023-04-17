@@ -35,11 +35,6 @@
 
   <dependencies>
     <dependency>
-      <artifactId>reactor-kafka</artifactId>
-      <groupId>io.projectreactor.kafka</groupId>
-      <version>${reactor-kafka.version}</version>
-    </dependency>
-    <dependency>
       <artifactId>spring-boot-starter-webflux</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
@@ -89,6 +84,16 @@
       <artifactId>spring-cloud-starter-gateway</artifactId>
     </dependency>
     <dependency>
+      <artifactId>reactor-kafka</artifactId>
+      <groupId>io.projectreactor.kafka</groupId>
+      <version>${reactor-kafka.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${logback-net.version}</version>
+    </dependency>
+    <dependency>
       <artifactId>contract-api</artifactId>
       <groupId>com.frizzer</groupId>
       <scope>compile</scope>
@@ -128,6 +133,7 @@
     <version>2.7.4</version>
   </parent>
   <properties>
+    <logback-net.version>6.6</logback-net.version>
     <openfeign.version>9.3.1</openfeign.version>
     <asyncer.version>0.9.1</asyncer.version>
     <reactor.version>3.4.23</reactor.version>

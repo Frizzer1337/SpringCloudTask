@@ -5,7 +5,7 @@ spring:
     import:
       - "optional:configserver:http://localhost:8888/"
   r2dbc:
-    url: r2dbc:mysql://db:3306/db?useSSL=false
+    url: r2dbc:mysql://db.default.svc.cluster.local:3306/db?useSSL=false
     username: user
     password: user
   kafka:
@@ -18,10 +18,11 @@ spring:
       discovery:
         service-name: credit-api
         instance-id: credit-api
+      enabled: false
     config:
       enabled: false
 kafka:
-  bootstrap: broker:9092
+  bootstrap: http://kafka-broker.default.svc.cluster.local:9092
   topic:
     payed: CREDIT_PAYED
     check: CREDIT_CHECK
@@ -38,6 +39,8 @@ credit:
     salary: 10
     creditBalance: 0.2
     socialCredit: 1.5
+logger:
+  default: com.frizzer.logger
 logging:
   level:
     org:
@@ -47,3 +50,7 @@ logging:
         r2dbc: DEBUG
 server:
   port: 7003
+reactive-feign:
+  client:
+    client-api:
+      url: http://client-api.default.svc.cluster.local:7000/client

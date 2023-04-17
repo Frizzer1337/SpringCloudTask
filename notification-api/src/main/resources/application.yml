@@ -16,8 +16,11 @@ spring:
       discovery:
         service-name: notification-api
         instance-id: notification-api
+      enabled: false
+logger:
+  default: com.frizzer.logger
 kafka:
-  bootstrap: broker:9092
+  bootstrap: http://kafka-broker.default.svc.cluster.local:9092
   group:
     id: creditConsumers
   topic:
