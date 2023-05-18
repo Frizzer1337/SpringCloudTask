@@ -1,4 +1,4 @@
-package com.frizzer.approveapi
+package com.frizzer.creditapi
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

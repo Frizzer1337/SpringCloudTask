@@ -1,11 +1,11 @@
-package com.frizzer.approveapi.service
+package com.frizzer.creditapi.service
 
-import com.frizzer.approveapi.client.ClientFeignClient
-import com.frizzer.approveapi.repository.CreditRepository
 import com.frizzer.contractapi.entity.client.Client
 import com.frizzer.contractapi.entity.client.fromDto
 import com.frizzer.contractapi.entity.credit.*
 import com.frizzer.contractapi.entity.payment.PaymentDto
+import com.frizzer.creditapi.client.ClientFeignClient
+import com.frizzer.creditapi.repository.CreditRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -14,6 +14,7 @@ import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
 import reactor.kotlin.core.publisher.toMono
@@ -44,33 +45,40 @@ open class CreditService(
     @Value(value = "\${kafka.topic.check}")
     private val creditCheckTopic: String = ""
 
+    open fun findAll(): Flux<CreditDto> {
+        return creditRepository.findAll().map { it.toDto() }
+    }
+
+    open fun findById(id: Int): Mono<CreditDto> {
+        return creditRepository.findById(id)
+            .switchIfEmpty(
+                ResponseStatusException(HttpStatus.NOT_FOUND, "Credit not found").toMono()
+            )
+            .map { it.toDto() }
+    }
+
     @Transactional
     open fun save(creditDto: CreditDto): Mono<CreditDto> {
-        return feignClient.findClientById(creditDto.clientId)
-            .switchIfEmpty(
-                ResponseStatusException(HttpStatus.NOT_FOUND, "ClientFeignClient not found").toMono()
-            )
-            .flatMap { approve(creditDto.fromDto(), it.fromDto()) }
+        return feignClient.findClientById(creditDto.clientId).switchIfEmpty(
+            ResponseStatusException(
+                HttpStatus.NOT_FOUND, "ClientFeignClient not found"
+            ).toMono()
+        ).flatMap { approve(creditDto.fromDto(), it.fromDto()) }
             .flatMap { sendCreditCheckEventKafka(it.toDto()).thenReturn(it.toDto()) }
     }
 
     @Transactional
     open fun pay(paymentDto: PaymentDto): Mono<CreditDto> {
-        return creditRepository
-            .findById(paymentDto.creditId)
-            .switchIfEmpty(
-                ResponseStatusException(HttpStatus.NOT_FOUND, "Credit not found").toMono()
-            )
-            .flatMap { credit ->
-                credit.creditBalance = credit.creditBalance - paymentDto.payment
-                credit.penalty = credit.penalty - paymentDto.payment
-                credit.lastPaymentDate = LocalDateTime.now().toString()
-                credit.toMono()
-            }
-            .flatMap { credit ->
-                creditRepository.save(credit)
-            }
-            .map { it.toDto() }
+        return creditRepository.findById(paymentDto.creditId).switchIfEmpty(
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Credit not found").toMono()
+        ).flatMap { credit ->
+            credit.creditBalance = credit.creditBalance - paymentDto.payment
+            credit.penalty = credit.penalty - paymentDto.payment
+            credit.lastPaymentDate = LocalDateTime.now().toString()
+            credit.toMono()
+        }.flatMap { credit ->
+            creditRepository.save(credit)
+        }.map { it.toDto() }
     }
 
 
@@ -104,12 +112,11 @@ open class CreditService(
         return creditRepository.save(credit)
     }
 
-    private fun getCreditStatus(creditRate: Double) =
-        when {
-            creditRate > approveRate -> CreditStatus.APPROVED
-            creditRate > humanApproveRate -> CreditStatus.NEED_HUMAN_APPROVE
-            else -> CreditStatus.NOT_APPROVED
-        }
+    private fun getCreditStatus(creditRate: Double) = when {
+        creditRate > approveRate -> CreditStatus.APPROVED
+        creditRate > humanApproveRate -> CreditStatus.NEED_HUMAN_APPROVE
+        else -> CreditStatus.NOT_APPROVED
+    }
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(CreditService::class.java)

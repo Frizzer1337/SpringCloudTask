@@ -32,11 +32,10 @@
     </plugins>
     <sourceDirectory>src/main/kotlin</sourceDirectory>
   </build>
-
   <dependencies>
     <dependency>
-      <artifactId>spring-boot-starter-webflux</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
     <dependency>
       <artifactId>spring-kafka</artifactId>
@@ -89,6 +88,17 @@
       <version>${reactor-kafka.version}</version>
     </dependency>
     <dependency>
+      <artifactId>reactor-kotlin-extensions</artifactId>
+      <groupId>io.projectreactor.kotlin</groupId>
+      <version>${kotlin-reactor.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <scope>test</scope>
+      <version>${reactor.version}</version>
+    </dependency>
+    <dependency>
       <groupId>net.logstash.logback</groupId>
       <artifactId>logstash-logback-encoder</artifactId>
       <version>${logback-net.version}</version>
@@ -105,10 +115,40 @@
       <version>${kotlin.version}</version>
     </dependency>
     <dependency>
-      <artifactId>kotlin-test</artifactId>
+      <artifactId>kotlin-test-junit</artifactId>
       <groupId>org.jetbrains.kotlin</groupId>
       <scope>test</scope>
       <version>${kotlin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>kafka</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>r2dbc</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql.version}</version>
     </dependency>
   </dependencies>
   <dependencyManagement>
@@ -119,6 +159,13 @@
         <scope>import</scope>
         <type>pom</type>
         <version>2021.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>1.16.0</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -133,6 +180,7 @@
     <version>2.7.4</version>
   </parent>
   <properties>
+    <jdbc.version>8.0.26</jdbc.version>
     <logback-net.version>6.6</logback-net.version>
     <openfeign.version>9.3.1</openfeign.version>
     <asyncer.version>0.9.1</asyncer.version>

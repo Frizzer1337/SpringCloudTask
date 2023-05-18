@@ -1,4 +1,4 @@
-package com.frizzer.approveapi.repository
+package com.frizzer.creditapi.repository
 
 import com.frizzer.contractapi.entity.credit.Credit
 import com.frizzer.contractapi.entity.credit.CreditStatus

@@ -21,6 +21,7 @@ class ClientController(
     private val log: Logger = LoggerFactory.getLogger(logName)
 
     @PostMapping("/")
+    @CrossOrigin(origins = ["\${angular.origins}"])
     fun register(@RequestBody clientDto: ClientDto): ResponseEntity<Mono<ClientDto>> {
         log.info("Registering client: $clientDto")
         return ResponseEntity.ok(clientService.save(clientDto))
@@ -28,6 +29,7 @@ class ClientController(
     }
 
     @GetMapping("/{id}")
+    @CrossOrigin(origins = ["\${angular.origins}"])
     fun findClientById(@PathVariable("id") id: Int): ResponseEntity<Mono<ClientDto>> {
         log.info("Finding client by id: $id")
         return ResponseEntity.ok(clientService.findClientById(id))
@@ -35,6 +37,7 @@ class ClientController(
     }
 
     @GetMapping("/")
+    @CrossOrigin(origins = ["\${angular.origins}"])
     fun findAll(): ResponseEntity<Flux<ClientDto>> {
         log.info("Finding all clients")
         return ResponseEntity.ok(clientService.findAll())

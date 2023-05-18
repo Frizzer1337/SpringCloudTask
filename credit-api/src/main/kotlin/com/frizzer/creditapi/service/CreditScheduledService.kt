@@ -1,6 +1,6 @@
-package com.frizzer.approveapi.service
+package com.frizzer.creditapi.service
 
-import com.frizzer.approveapi.repository.CreditRepository
+import com.frizzer.creditapi.repository.CreditRepository
 import com.frizzer.contractapi.entity.credit.CreditDto
 import com.frizzer.contractapi.entity.credit.CreditPayedEvent
 import com.frizzer.contractapi.entity.credit.CreditStatus
@@ -44,7 +44,7 @@ class CreditScheduledService(
 
     private val emptyBalance = 0
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000000)
     fun changeStatusIfCreditPayed(): Disposable {
         return creditRepository
             .findCreditsByCreditBalanceEqualsAndCreditStatusEquals(
@@ -58,7 +58,7 @@ class CreditScheduledService(
             .subscribe()
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000000)
     fun sendPenalty(): Disposable {
         log.info("Credit's were checked")
         return creditRepository
@@ -74,7 +74,7 @@ class CreditScheduledService(
             .subscribe()
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000000)
     fun changeStatusForBigPenalty(): Disposable {
         return creditRepository
             .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(
@@ -89,7 +89,7 @@ class CreditScheduledService(
             .subscribe()
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000000)
     fun sendWarnForBigPenalty(): Disposable {
         return creditRepository
             .findCreditsByLastPaymentDateIsLessThanAndCreditStatusEquals(

@@ -39,5 +39,7 @@ reactive-feign:
   client:
     credit-api:
       url: http://credit-api.default.svc.cluster.local:7003/credit
+angular:
+  origins: http://localhost:4200
 
 

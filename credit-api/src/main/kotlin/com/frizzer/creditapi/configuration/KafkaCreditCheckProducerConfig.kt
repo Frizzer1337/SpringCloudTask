@@ -1,6 +1,6 @@
-package com.frizzer.approveapi.configuration
+package com.frizzer.creditapi.configuration
 
-import com.frizzer.contractapi.entity.credit.CreditPayedEvent
+import com.frizzer.contractapi.entity.credit.CreditCheckEvent
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -11,13 +11,13 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 import reactor.kafka.sender.SenderOptions
 
 @Configuration
-open class CreditPayedEventProducer {
+open class KafkaCreditCheckProducerConfig {
     @Bean
-    open fun reactiveCreditPayedEventKafkaTemplate(@Value(value = "\${kafka.bootstrap}") bootstrapAddress: String): ReactiveKafkaProducerTemplate<String, CreditPayedEvent> {
+    open fun reactiveKafkaTemplate(@Value(value = "\${kafka.bootstrap}") bootstrapAddress: String): ReactiveKafkaProducerTemplate<String, CreditCheckEvent> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
-        return ReactiveKafkaProducerTemplate<String, CreditPayedEvent>(SenderOptions.create(props))
+        return ReactiveKafkaProducerTemplate<String, CreditCheckEvent>(SenderOptions.create(props))
     }
 }

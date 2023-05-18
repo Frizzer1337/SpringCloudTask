@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kafka.sender.SenderResult
 
@@ -37,6 +38,14 @@ open class PaymentService(
             }
             .flatMap { paymentRepository.save(paymentDto.fromDto()) }
             .flatMap { sendPaymentEvent(it.toDto()).thenReturn(it.toDto()) }
+    }
+
+    open fun findAll(): Flux<PaymentDto> {
+        return paymentRepository.findAll().map { it.toDto() }
+    }
+
+    open fun findById(id: Int): Mono<PaymentDto> {
+        return paymentRepository.findById(id).map { it.toDto() }
     }
 
     private fun sendPaymentEvent(

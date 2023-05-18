@@ -54,3 +54,5 @@ reactive-feign:
   client:
     client-api:
       url: http://client-api.default.svc.cluster.local:7000/client
+angular:
+  origins: http://localhost:4200

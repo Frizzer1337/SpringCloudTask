@@ -1,4 +1,4 @@
-package com.frizzer.approveapi.client
+package com.frizzer.creditapi.client
 
 import com.frizzer.contractapi.entity.client.ClientDto
 import org.springframework.stereotype.Service

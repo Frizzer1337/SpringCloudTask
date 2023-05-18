@@ -23,6 +23,8 @@ spring:
       enabled: false
 logger:
   default: com.frizzer.logger
+angular:
+  origins: http://localhost:4200
 logging:
   level:
     org:
