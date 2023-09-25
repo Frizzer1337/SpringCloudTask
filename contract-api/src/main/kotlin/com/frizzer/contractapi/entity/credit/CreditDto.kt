@@ -1,14 +1,13 @@
 package com.frizzer.contractapi.entity.credit
 
-import org.bson.types.ObjectId
 import java.time.LocalDateTime
 
 data class CreditDto(
-    var id: String = ObjectId().toString(),
-    var lastPaymentDate: String = LocalDateTime.now().toString(),
-    var creditBalance: Int,
-    var penalty: Int,
-    var clientId: String,
+    val id: Int,
+    val lastPaymentDate: String = LocalDateTime.now().toString(),
+    val creditBalance: Int,
+    val penalty: Int,
+    val clientId: Int,
     var creditStatus: CreditStatus = CreditStatus.CREATED
 )
 

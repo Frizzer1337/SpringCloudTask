@@ -1,20 +1,45 @@
 spring:
+  application:
+    name: payment-api
+  config:
+    import:
+      - "optional:configserver:http://localhost:8888/"
+  r2dbc:
+    url: r2dbc:mysql://db.default.svc.cluster.local:3306/db?useSSL=false
+    username: user
+    password: user
   kafka:
     consumer:
       auto-offset-reset: earliest
-  data:
-    mongodb:
-      database: payment
-      uri: mongodb+srv://Frizzer:Giraf008@cluster0.mtbpt95.mongodb.net/?retryWrites=true&w=majority
+  cloud:
+    config:
+      enabled: false
+    consul:
+      host: consul-server1
+      port: 8500
+      discovery:
+        service-name: payment-api
+        instance-id: payment-api
+      enabled: false
 kafka:
-  bootstrap: localhost:9092
+  bootstrap: http://kafka-broker.default.svc.cluster.local:9092
   topic:
     payment: CREDIT_PAYMENT
 server:
   port: 7002
+logger:
+  default: com.frizzer.logger
 logging:
   level:
     org:
       springframework:
         transaction:
           interceptor: TRACE
+reactive-feign:
+  client:
+    credit-api:
+      url: http://credit-api.default.svc.cluster.local:7003/credit
+angular:
+  origins: http://localhost:4200
+
+

@@ -8,7 +8,7 @@
       <plugin>
         <artifactId>kotlin-maven-plugin</artifactId>
         <configuration>
-          <jvmTarget>1.8</jvmTarget>
+          <jvmTarget>17</jvmTarget>
         </configuration>
         <executions>
           <execution>
@@ -37,7 +37,7 @@
     <dependency>
       <artifactId>reactor-kafka</artifactId>
       <groupId>io.projectreactor.kafka</groupId>
-      <version>1.3.13</version>
+      <version>${reactor-kafka.version}</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-webflux</artifactId>
@@ -48,9 +48,16 @@
       <groupId>org.springframework.kafka</groupId>
     </dependency>
     <dependency>
-      <artifactId>log4j-core</artifactId>
-      <groupId>org.apache.logging.log4j</groupId>
-      <version>2.18.0</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-consul-discovery</artifactId>
     </dependency>
     <dependency>
       <artifactId>spring-boot-devtools</artifactId>
@@ -69,13 +76,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-      <groupId>org.springframework.boot</groupId>
-    </dependency>
-    <dependency>
       <artifactId>reactor-core</artifactId>
       <groupId>io.projectreactor</groupId>
-      <version>3.4.23</version>
+      <version>${reactor.version}</version>
     </dependency>
     <dependency>
       <artifactId>contract-api</artifactId>
@@ -94,9 +97,23 @@
       <scope>test</scope>
       <version>${kotlin.version}</version>
     </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${logback-net.version}</version>
+    </dependency>
   </dependencies>
-
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>2021.0.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <description>notification-api</description>
   <groupId>com.frizzer.kafka</groupId>
   <modelVersion>4.0.0</modelVersion>
@@ -108,7 +125,14 @@
     <version>2.7.4</version>
   </parent>
   <properties>
-    <java.version>11</java.version>
+    <logback-net.version>6.6</logback-net.version>
+    <openfeign.version>9.3.1</openfeign.version>
+    <asyncer.version>0.9.1</asyncer.version>
+    <reactor.version>3.4.23</reactor.version>
+    <reactor-kafka.version>1.3.13</reactor-kafka.version>
+    <reactive-feign.version>3.1.2</reactive-feign.version>
+    <kotlin-reactor.version>1.2.2</kotlin-reactor.version>
+    <java.version>17</java.version>
     <kotlin.version>1.8.20-RC</kotlin.version>
   </properties>
   <version>0.0.1-SNAPSHOT</version>

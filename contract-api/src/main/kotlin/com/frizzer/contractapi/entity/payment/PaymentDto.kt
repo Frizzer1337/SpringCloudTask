@@ -1,11 +1,10 @@
 package com.frizzer.contractapi.entity.payment
 
-import org.bson.types.ObjectId
 
 data class PaymentDto(
-    var id: String = ObjectId().toString(),
+    var id: Int,
     var payment: Int,
-    var creditId: String,
+    var creditId: Int,
     var status: PaymentStatus = PaymentStatus.PENDING
 )
 

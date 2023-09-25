@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: gateway-api
+  cloud:
+    gateway:
+      routes:
+        - id: client-api
+          uri: lb://client-api
+          predicates:
+            - Path=/client/**
+        - id: credit-api
+          uri: lb://credit-api
+          predicates:
+            - Path=/credit/**
+        - id: payment-api
+          uri: lb://payment-api
+          predicates:
+            - Path=/payment/**
+      discovery:
+        locator:
+          enabled: true
+    consul:
+      config:
+        enabled: false
+      host: consul-server1
+      port: 8500
+server:
+  port: 8000

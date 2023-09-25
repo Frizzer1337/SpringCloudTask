@@ -1,0 +1,23 @@
+spring:
+  r2dbc:
+   url: r2dbc:tc:mysql:///db?TC_IMAGE_TAG=5.7
+  sql:
+    init:
+      mode: always
+  cloud:
+    consul:
+      enabled: false
+    config:
+      enabled: false
+logger:
+  default: com.frizzer.logger
+reactive-feign:
+  client:
+    credit-api:
+      url: http://localhost:7000/client
+kafka:
+  bootstrap: localhost:9092
+  topic:
+    payment: CREDIT_PAYMENT
+angular:
+  origins: http://localhost:4200
